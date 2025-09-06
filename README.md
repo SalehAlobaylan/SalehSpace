@@ -1,5 +1,6 @@
 # SalehSpace
 
+
 ## Tech Stack
 
 <p align="left">
@@ -9,6 +10,11 @@
   <img src="https://skillicons.dev/icons?i=postgres" alt="PostgreSQL" height="50" />
   <img src="https://skillicons.dev/icons?i=docker" alt="Docker" height="50" />
 </p>
+
+## Main colors for the website:
+- Dark Turquoise #045C5A
+- Lightweight Beige #F6E5C6 (For font)
+---
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
