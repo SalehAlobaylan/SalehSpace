@@ -1,6 +1,7 @@
 /node_modules
 /Frontend/node_modules
 .next
+/.next
 .DS_Store
 .env
 .env.*
