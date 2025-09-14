@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-
-const locales = ['en', 'ar'];
-const defaultLocale = 'en';
+import { locales, defaultLocale, getLocaleFromPathname } from './src/lib/i18n';
 
 function hasLocale(pathname: string): boolean {
-  return locales.some((locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
+  return getLocaleFromPathname(pathname) !== null;
 }
 
 export function middleware(request: NextRequest) {

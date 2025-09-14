@@ -1,6 +1,6 @@
-import Image from "next/image";
 import MainText from "@/components/mainText";
 import Socials from "@/components/socials";
+import GithubPreview from "@/components/githubPreview";
 // import { Button } from "@/components/ui/button";
 
 export default function Home() {
