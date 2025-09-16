@@ -1,7 +1,3 @@
-"use client";
-
-import GithubPreview from "./githubPreview";
-
 export default function() {
     return (
         <div className="flex gap-4 items-center flex-col sm:flex-row justify-center">
@@ -22,9 +18,7 @@ export default function() {
                 X / Twitter
             </a>
             </div>
-
-            {/* GitHub */}
-            <GithubPreview />
+            
         </div>
     )
 }
