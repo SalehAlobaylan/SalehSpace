@@ -23,8 +23,6 @@ export default function() {
             </a>
             </div>
 
-            {/* GitHub */}
-            <GithubPreview />
         </div>
     )
 }

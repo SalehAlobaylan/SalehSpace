@@ -1,6 +1,7 @@
 import MainText from "@/components/mainText";
 import Socials from "@/components/socials";
 import GithubPreview from "@/components/githubPreview";
+import PostsCarousel from "@/components/postsCarousel";
 // import { Button } from "@/components/ui/button";
 
 export default function Home() {
@@ -10,6 +11,9 @@ export default function Home() {
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <MainText />
+        </div>
+        <div className="flex gap-4 items-center flex-col sm:flex-row">
+          <PostsCarousel />
         </div>
         <div className="flex gap-4 items-center flex-col sm:flex-row">
         <Socials />
