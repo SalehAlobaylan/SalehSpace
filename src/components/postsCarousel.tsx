@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 import * as React from "react"
 
 import { Card, CardContent } from "@/components/ui/card"
@@ -10,67 +10,106 @@ import { Carousel,
     CarouselPrevious, 
     CarouselNext 
 } from "@/components/ui/carousel"
+import Autoplay from "embla-carousel-autoplay"
 import { ArrowRight } from "lucide-react";
 
 type Post = {
     id: string
     title: string
     url: string
-    date: string // ISO
+    date: string 
     source: "blog" | "x" | "linkedin"
     excerpt?: string
 }
 
-export default async function PostsCarousel() {
-    // Use absolute URL that works in both dev and production
-    const baseUrl = process.env.VERCEL_URL 
-        ? `https://${process.env.VERCEL_URL}` 
-        : process.env.NODE_ENV === 'development' 
-            ? 'http://localhost:3000' 
-            : 'https://salehspace.dev'
-    
-    const res = await fetch(`${baseUrl}/posts.json`, {
-        next: { revalidate: 86400 } // 24 hours
-    })
-    
-    if (!res.ok) {
-        throw new Error(`Failed to fetch posts: ${res.status}`)
+export default function PostsCarousel() {
+    const [posts, setPosts] = React.useState<Post[]>([])
+    const [loading, setLoading] = React.useState(true)
+    const [api, setApi] = React.useState<any>()
+    const [current, setCurrent] = React.useState(0)
+
+    React.useEffect(() => {
+        fetch('/posts.json')
+            .then(res => res.json())
+            .then(data => {
+                setPosts(data)
+                setLoading(false)
+            })
+            .catch(err => {
+                console.error('Failed to fetch posts:', err)
+                setLoading(false)
+            })
+    }, [])
+
+    React.useEffect(() => {
+        if (!api) {
+            return
+        }
+
+        setCurrent(api.selectedScrollSnap())
+
+        api.on("select", () => {
+            setCurrent(api.selectedScrollSnap())
+        })
+    }, [api])
+
+    if (loading) {
+        return <div className="flex justify-center p-8">Loading posts...</div>
     }
-    
-    const posts: Post[] = await res.json()
 
     const recent = posts
-    .sort((a, b) => +new Date(b.date) - +new Date(a.date))
-    .slice(0, 12)
+        .sort((a, b) => +new Date(b.date) - +new Date(a.date))
+        .slice(0, 12)
 
     return (
+        <div className="flex justify-center w-full">
             <Carousel
+              setApi={setApi}
+              plugins={[
+                Autoplay({
+                  delay: 5000,
+                  stopOnInteraction: true,
+                }),
+              ]}
               opts={{
-                align: "start",
+                align: "center",
+                loop: true,
+                slidesToScroll: 1,
               }}
-              className="w-full max-w-sm"
+              className="w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl"
             >
               <CarouselContent>
-                {recent.map((post, index) => (
-                  <CarouselItem key={post.id} className="md:basis-1/2 lg:basis-1/3">
-                    <div className="p-1">
-                      <Card>
-                        <CardContent className="flex aspect-square items-center justify-center p-6">
-                          <span className="text-3xl font-semibold">{post.title}</span>
-                          <p className="text-sm text-muted-foreground">{post.excerpt}</p>
-                          <p className="text-sm text-muted-foreground">{post.date}</p>
+                {recent.map((post, index) => {
+                  const isCenter = index === current
+                  return (
+                  <CarouselItem key={post.id} className="basis-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3">
+                     <div className={`px-0.5 transition-all duration-300 ${isCenter ? 'scale-105 z-10' : 'scale-60 opacity-70'}`}>
+                      <Card className={`${isCenter ? 'shadow-lg ring-2 ring-primary/20' : ''}`}>
+                        <CardContent className="flex flex-col aspect-square items-start justify-between p-2">
+                          <div className="space-y-1 flex-1">
+                            <h3 className="text-sm font-semibold line-clamp-2 leading-tight">{post.title}</h3>
+                            <p className="text-xs text-muted-foreground line-clamp-3">{post.excerpt}</p>
+                          </div>
+                          <div className="w-full">
+                            <p className="text-xs text-muted-foreground">{new Date(post.date).toLocaleDateString()}</p>
+                            <span className="inline-block mt-1 px-2 py-1 text-xs bg-secondary rounded-md capitalize">{post.source}</span>
+                          </div>
                         </CardContent>
-                      </Card>
-                      <Button variant="outline" className="w-full mt-2">
-                        Read More {post.source}
-                        <ArrowRight className="w-4 h-4" />
+                      <Button variant="ghost" size="sm" className="ml-auto mt-1 text-xs opacity-60 hover:opacity-100 px-1 py-0.5 h-auto" asChild>
+                        <a href={post.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+                          Read on {post.source}
+                          <ArrowRight className="w-3 h-3" />
+                        </a>
                       </Button>
+                      </Card>
                     </div>
                   </CarouselItem>
-                ))}
+                  )
+                })}
               </CarouselContent>
               <CarouselPrevious />
               <CarouselNext />
             </Carousel>
+        </div>
           )
 }

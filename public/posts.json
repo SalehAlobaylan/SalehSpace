@@ -24,19 +24,43 @@
     "excerpt": "Quick TypeScript tips to improve your development workflow."
   },
   {
-    "id": "2", 
-    "title": "React Best Practices",
-    "url": "https://example.com/react-practices",
-    "date": "2024-01-10T14:30:00Z",
+    "id": "4",
+    "title": "Building Scalable APIs",
+    "url": "https://example.com/scalable-apis",
+    "date": "2024-01-05T16:20:00Z",
     "source": "blog",
-    "excerpt": "Discover the latest React patterns and best practices for 2024."
+    "excerpt": "How to design and build APIs that scale with your application."
   },
   {
-    "id": "2", 
-    "title": "React Best Practices",
-    "url": "https://example.com/react-practices",
-    "date": "2024-01-10T14:30:00Z",
+    "id": "5",
+    "title": "CSS Grid vs Flexbox",
+    "url": "https://linkedin.com/pulse/css-grid-flexbox",
+    "date": "2024-01-03T11:45:00Z",
+    "source": "linkedin",
+    "excerpt": "When to use CSS Grid and when to use Flexbox for layouts."
+  },
+  {
+    "id": "6",
+    "title": "JavaScript Performance Tips",
+    "url": "https://twitter.com/example/status/456",
+    "date": "2024-01-01T08:30:00Z",
+    "source": "x",
+    "excerpt": "Simple tricks to optimize your JavaScript code performance."
+  },
+  {
+    "id": "7",
+    "title": "Modern CSS Techniques",
+    "url": "https://example.com/modern-css",
+    "date": "2023-12-28T13:15:00Z",
     "source": "blog",
-    "excerpt": "Discover the latest React patterns and best practices for 2024."
+    "excerpt": "Exploring the latest CSS features and how to use them effectively."
+  },
+  {
+    "id": "8",
+    "title": "Database Design Patterns",
+    "url": "https://linkedin.com/pulse/database-patterns",
+    "date": "2023-12-25T19:00:00Z",
+    "source": "linkedin",
+    "excerpt": "Common database design patterns every developer should know."
   }
 ]
