@@ -25,7 +25,7 @@ export default function Home() {
 
       {/* footer */}
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <p>Copyright © 2025 SalehSpace</p>
+        {/* <p>Copyright © 2025 SalehSpace</p> */}
       </footer>
     </div>
   );
