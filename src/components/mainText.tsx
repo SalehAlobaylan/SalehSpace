@@ -2,14 +2,15 @@
 
 export default function MainText() {
     return (
-        <div className="text-center">
-            <h1>I started this project in 2017 as a first project for me to learn coding
+        <div className="w-96 mx-auto bg-card/30 border border-border rounded-lg p-6 text-center flex items-center justify-center min-h-[200px]">
+            <p className="text-foreground">
+                I started this project in 2017 as a first project for me to learn coding
                 but i dropped it because i don't know what to put in it :)
-                <br />
-                now after more than 8 yaers i decided to rebuild the project but still i don't know what to put in it :
-                <br />
+                <br /><br />
+                now after more than 8 years i decided to rebuild the project but still i don't know what to put in it :
+                <br /><br />
                 but at the end, i just want a space for me in this internet :)
-            </h1>
+            </p>
         </div>
     )
 }
