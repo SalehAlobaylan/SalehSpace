@@ -1,7 +1,8 @@
 import MainText from "@/components/mainText";
 import Socials from "@/components/socials";
-import GithubPreview from "@/components/githubPreview";
+// import GithubPreview from "@/components/githubPreview";
 import PostsCarousel from "@/components/postsCarousel";
+import GithubCard from "@/components/githubCard/githubCard";
 // import { Button } from "@/components/ui/button";
 
 export default function Home() {
@@ -18,6 +19,8 @@ export default function Home() {
         <div className="flex gap-4 items-center flex-col sm:flex-row">
         <Socials />
         </div>
+        <GithubCard />
+
       </main>
 
       {/* footer */}
