@@ -8,27 +8,29 @@ import Header from "@/components/header";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <Header />
-      <main className="flex flex-col gap-[32px] row-start-2 items-center">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden font-[family-name:var(--font-geist-sans)]">
+      <div className="container mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 max-w-full">
+        <Header />
+        <main className="flex flex-col gap-6 sm:gap-8 items-center w-full">
+          <div className="w-full flex justify-center">
+            <PostsCarousel />
+          </div>
+          <div className="w-full flex justify-center">
+            <Socials />
+          </div>
+          <div className="w-full flex justify-center">
+            <MainText />
+          </div>
+          <div className="w-full flex justify-center">
+            <GithubCard />
+          </div>
+        </main>
 
-        <div className="flex gap-4 w-full items-center flex-col sm:flex-row">
-          <PostsCarousel />
-        </div>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-        <Socials />
-        </div>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <MainText />
-        </div>
-        <GithubCard />
-
-      </main>
-
-      {/* footer */}
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        {/* <p>Copyright © 2025 SalehSpace</p> */}
-      </footer>
+        {/* footer */}
+        <footer className="mt-8 sm:mt-12 flex gap-4 flex-wrap items-center justify-center text-center">
+          {/* <p>Copyright © 2025 SalehSpace</p> */}
+        </footer>
+      </div>
     </div>
   );
 }

@@ -64,7 +64,7 @@ export default function PostsCarousel() {
         .slice(0, 12)
 
     return (
-        <div className="flex justify-center w-full">
+        <div className="w-full max-w-full px-2">
             <Carousel
               setApi={setApi}
               plugins={[
@@ -78,7 +78,7 @@ export default function PostsCarousel() {
                 loop: true,
                 slidesToScroll: 1,
               }}
-              className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl overflow-hidden"
+              className="w-full max-w-[280px] sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto overflow-hidden"
             >
               <CarouselContent>
                 {recent.map((post, index) => {
@@ -86,8 +86,8 @@ export default function PostsCarousel() {
                   const content = post.excerpt || post.title
                   const isRtl = isArabic(content)
                   return (
-                  <CarouselItem key={post.id} className="basis-[85%] sm:basis-[70%] md:basis-[60%] lg:basis-[55%]">
-                     <div className={`px-2 transition-all duration-500 ease-out ${isCenter ? 'scale-100 z-20' : 'scale-90 opacity-50'}`}>
+                  <CarouselItem key={post.id} className="basis-[90%] sm:basis-[75%] md:basis-[65%] lg:basis-[55%]">
+                     <div className={`px-1 transition-all duration-500 ease-out ${isCenter ? 'scale-100 z-20' : 'scale-95 opacity-50'}`}>
                       <Card className={`${isCenter ? 'shadow-2xl ring-2 ring-primary/30 bg-background' : 'shadow-sm'}`}>
                         <CardContent className={`flex flex-col gap-2 ${isCenter ? 'p-4' : 'p-2'}`}>
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
