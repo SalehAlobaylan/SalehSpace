@@ -85,15 +85,18 @@ export default function PostsCarousel() {
                   <CarouselItem key={post.id} className="basis-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3">
                      <div className={`px-0.5 transition-all duration-300 ${isCenter ? 'scale-105 z-10' : 'scale-60 opacity-70'}`}>
                       <Card className={`${isCenter ? 'shadow-lg ring-2 ring-primary/20' : ''}`}>
-                        <CardContent className="flex flex-col aspect-square items-start justify-between p-2">
-                          <div className="space-y-1 flex-1">
-                            <h3 className="text-sm font-semibold line-clamp-2 leading-tight">{post.title}</h3>
-                            <p className="text-xs text-muted-foreground line-clamp-3">{post.excerpt}</p>
+                        <CardContent className="flex flex-col gap-2 p-2">
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-secondary">
+                              {post.source === 'x' ? '𝕏' : post.source === 'linkedin' ? 'in' : '📝'}
+                            </span>
+                            <span className="capitalize">{post.source}</span>
+                            <span>•</span>
+                            <span>{new Date(post.date).toLocaleDateString()}</span>
                           </div>
-                          <div className="w-full">
-                            <p className="text-xs text-muted-foreground">{new Date(post.date).toLocaleDateString()}</p>
-                            <span className="inline-block mt-1 px-2 py-1 text-xs bg-secondary rounded-md capitalize">{post.source}</span>
-                          </div>
+                          <p className="text-sm leading-snug line-clamp-5">
+                            {post.excerpt || post.title}
+                          </p>
                         </CardContent>
                       <Button variant="ghost" size="sm" className="ml-auto mt-1 text-xs opacity-60 hover:opacity-100 px-1 py-0.5 h-auto" asChild>
                         <a href={post.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
