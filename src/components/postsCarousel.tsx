@@ -22,6 +22,8 @@ type Post = {
     excerpt?: string
 }
 
+const isArabic = (text: string): boolean => /[\u0600-\u06FF\u0750-\u077F]/.test(text)
+
 export default function PostsCarousel() {
     const [posts, setPosts] = React.useState<Post[]>([])
     const [loading, setLoading] = React.useState(true)
@@ -76,32 +78,48 @@ export default function PostsCarousel() {
                 loop: true,
                 slidesToScroll: 1,
               }}
-              className="w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl"
+              className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl overflow-hidden"
             >
               <CarouselContent>
                 {recent.map((post, index) => {
                   const isCenter = index === current
+                  const content = post.excerpt || post.title
+                  const isRtl = isArabic(content)
                   return (
-                  <CarouselItem key={post.id} className="basis-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3">
-                     <div className={`px-0.5 transition-all duration-300 ${isCenter ? 'scale-105 z-10' : 'scale-60 opacity-70'}`}>
-                      <Card className={`${isCenter ? 'shadow-lg ring-2 ring-primary/20' : ''}`}>
-                        <CardContent className="flex flex-col gap-2 p-2">
+                  <CarouselItem key={post.id} className="basis-[85%] sm:basis-[70%] md:basis-[60%] lg:basis-[55%]">
+                     <div className={`px-2 transition-all duration-500 ease-out ${isCenter ? 'scale-100 z-20' : 'scale-90 opacity-50'}`}>
+                      <Card className={`${isCenter ? 'shadow-2xl ring-2 ring-primary/30 bg-background' : 'shadow-sm'}`}>
+                        <CardContent className={`flex flex-col gap-2 ${isCenter ? 'p-4' : 'p-2'}`}>
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-secondary">
-                              {post.source === 'x' ? '𝕏' : post.source === 'linkedin' ? 'in' : '📝'}
+                            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full overflow-hidden">
+                              {post.source === 'x' ? (
+                                <img 
+                                  src="/x-profile.jpg" 
+                                  alt="X Profile" 
+                                  className="w-full h-full rounded-full object-cover"
+                                />
+                              ) : post.source === 'linkedin' ? (
+                                <img 
+                                  src="/inkedin-profile.jpg" 
+                                  alt="LinkedIn Profile" 
+                                  className="w-full h-full rounded-full object-cover"
+                                />
+                              ) : (
+                                <span className="text-lg">📝</span>
+                              )}
                             </span>
                             <span className="capitalize">{post.source}</span>
                             <span>•</span>
                             <span>{new Date(post.date).toLocaleDateString()}</span>
                           </div>
-                          <p className="text-sm leading-snug line-clamp-5">
-                            {post.excerpt || post.title}
+                          <p dir={isRtl ? "rtl" : "ltr"} className={`leading-snug line-clamp-5 ${isCenter ? 'text-base' : 'text-sm'} ${isRtl ? 'text-right' : 'text-left'}`}>
+                            {content}
                           </p>
                         </CardContent>
-                      <Button variant="ghost" size="sm" className="ml-auto mt-1 text-xs opacity-60 hover:opacity-100 px-1 py-0.5 h-auto" asChild>
+                      <Button variant="ghost" size="sm" className={`ml-auto mt-1 opacity-60 hover:opacity-100 px-1 py-0.5 h-auto ${isCenter ? 'text-sm' : 'text-xs'}`} asChild>
                         <a href={post.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
                           Read on {post.source}
-                          <ArrowRight className="w-3 h-3" />
+                          <ArrowRight className={`${isCenter ? 'w-4 h-4' : 'w-3 h-3'}`} />
                         </a>
                       </Button>
                       </Card>

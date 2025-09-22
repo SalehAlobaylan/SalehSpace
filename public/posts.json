@@ -1,74 +1,34 @@
 [
   {
     "id": "1",
-    "title": "Getting Started with Next.js",
-    "url": "https://example.com/nextjs-guide",
-    "date": "2024-01-15T10:00:00Z",
-    "source": "blog",
-    "excerpt": "Learn the fundamentals of Next.js and build your first application."
+    "title": "Projects",
+    "url": "https://x.com/SAlobaylan/status/1950907609646547322",
+    "date": "2025-07-31T16:13:00Z",
+    "source": "x",
+    "excerpt": "مهما كثرت مشاريعك البرمجية دايم الرهيبة منها بيكون عددها قليل\nلأن كل ما اشتغلت على مشاريع زيادة مشاريعك الأقدم بتعتبر ضعيفة وشوية خرابيش ما تواجه للأسف 🙃"
   },
   {
     "id": "2",
-    "title": "React Best Practices",
-    "url": "https://example.com/react-practices",
-    "date": "2024-01-10T14:30:00Z",
-    "source": "blog",
-    "excerpt": "Discover the latest React patterns and best practices for 2024."
+    "title": "AI",
+    "url": "https://x.com/SAlobaylan/status/1957807712974082285",
+    "date": "2025-08-19T17:11:00Z",
+    "source": "x",
+    "excerpt": "من يوم جاء الذكاء الاصطناعي وتطور بشموليته ماعاد صار مهم مدى حجم المهارات الي اكتسبتها كثر ما هو مهم كمية الأشياء الي بنيتها ومدى قوتها واعتماديتها\n\nتقريباً الجميع صار يقدر يستخدم جميع الأدوات والمهارات\nلكن معيار الكفاءة صار هو كيف آداء الأشياء الي بنيتها بهذي الأدوات؟"
   },
   {
     "id": "3",
-    "title": "TypeScript Tips",
-    "url": "https://twitter.com/example/status/123",
-    "date": "2024-01-08T09:15:00Z",
-    "source": "x",
-    "excerpt": "Quick TypeScript tips to improve your development workflow."
+    "title": "First Blog",
+    "url": "https://salehspace.dev/blog/first-blog",
+    "date": "2025-09-22T14:30:00Z",
+    "source": "blog",
+    "excerpt": "First empty blog post 😆😆😆"
   },
   {
     "id": "4",
-    "title": "Building Scalable APIs",
-    "url": "https://example.com/scalable-apis",
-    "date": "2024-01-05T16:20:00Z",
-    "source": "blog",
-    "excerpt": "How to design and build APIs that scale with your application."
-  },
-  {
-    "id": "5",
-    "title": "CSS Grid vs Flexbox",
-    "url": "https://linkedin.com/pulse/css-grid-flexbox",
+    "title": "Content management system",
+    "url": "https://www.linkedin.com/feed/update/urn:li:activity:7362159138191155200/",
     "date": "2024-01-03T11:45:00Z",
     "source": "linkedin",
-    "excerpt": "When to use CSS Grid and when to use Flexbox for layouts."
-  },
-  {
-    "id": "6",
-    "title": "JavaScript Performance Tips",
-    "url": "https://twitter.com/example/status/456",
-    "date": "2024-01-01T08:30:00Z",
-    "source": "x",
-    "excerpt": "Simple tricks to optimize your JavaScript code performance."
-  },
-  {
-    "id": "7",
-    "title": "Modern CSS Techniques",
-    "url": "https://example.com/modern-css",
-    "date": "2023-12-28T13:15:00Z",
-    "source": "blog",
-    "excerpt": "Exploring the latest CSS features and how to use them effectively."
-  },
-  {
-    "id": "8",
-    "title": "Database Design Patterns",
-    "url": "https://linkedin.com/pulse/database-patterns",
-    "date": "2023-12-25T19:00:00Z",
-    "source": "linkedin",
-    "excerpt": "Common database design patterns every developer should know."
-  },
-  {
-    "id": "1758368974826",
-    "title": "رفاهية استقبال الوافدين",
-    "url": "https://x.com/salehalobilan/status/1964814854117793883",
-    "date": "2025-09-20T11:49:34.826Z",
-    "source": "x",
-    "excerpt": "تتتتتتتتت"
+    "excerpt": "جاني هالسؤال أمس وأنا جالس أجرب أبني نظام إدارة محتوى (CMS)، كنت أبنيه لمنصة تواصل اجتماعي وكنت محتار في شكلها واسلوبها كيف ممكن أخليه مختلف\nفيوم شفت الفكرة هذي تفتحت عيوني على أفكار جديدة لكن اعترضني التساؤل هذا \nهل أخلاقياتي تسمح لي أستثمر وقتي في هذا المسار؟ 😕\n\nعلى كل حال هذي الريبو الي باستخدمه في بناء نظام إدارة المحتوى وبيكون بلغة Go مع Gin بشكل أساسي\nوراح أربط فيه Microservice للكاشنق والدعم إن شاء الله مبنية بTypescript وFastify.\n\n إذا عندكم أي اقتراحات للستاك أو تعديلات عليه أتحفوني لأن باقي توي بادي فيه 😃"
   }
 ]
