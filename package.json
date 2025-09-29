@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "get:post": "node scripts/getPostContent.js",
+    "sync:posts": "node scripts/getPostContent.js --update-existing --force"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
