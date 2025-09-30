@@ -3,26 +3,17 @@ import Socials from "@/components/socials";
 // import GithubPreview from "@/components/githubPreview";
 import PostsCarousel from "@/components/postsCarousel";
 import GithubCard from "@/components/githubCard/githubCard";
-import Header from "@/components/header";
+import TabsLiftedDemo from "@/components/tabs";
+
 // import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden font-[family-name:var(--font-geist-sans)]">
       <div className="container mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 max-w-full">
-        {/* <Header /> */}
         <main className="flex flex-col gap-6 sm:gap-8 items-center w-full">
           <div className="w-full flex justify-center">
-            <PostsCarousel />
-          </div>
-          <div className="w-full flex justify-center">
-            <Socials />
-          </div>
-          <div className="w-full flex justify-center">
-            <MainText />
-          </div>
-          <div className="w-full flex justify-center">
-            <GithubCard />
+            <TabsLiftedDemo />
           </div>
         </main>
 
