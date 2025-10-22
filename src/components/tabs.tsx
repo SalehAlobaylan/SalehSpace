@@ -4,6 +4,7 @@ import PostsCarousel from './postsCarousel'
 import Socials from './socials'
 import MainText from './mainText'
 import GithubCard from './githubCard/githubCard'
+import PostsList from './posts/postsList'
 
 const tabs = [
   {
@@ -42,10 +43,8 @@ const tabs = [
     name: 'Posts',
     value: 'posts',
     content: (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-muted-foreground text-center">
-          📱 Posts section coming but not soon :)
-        </p>
+      <div className="w-full">
+        <PostsList />
       </div>
     )
   }
