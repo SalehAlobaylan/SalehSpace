@@ -114,6 +114,13 @@ export function sanitizeReadmeHtml(html: string): string {
 
   // remove empty anchors (no inner text and no nested content) *empty tables*
   out = out.replace(/<a\b[^>]*>\s*<\/a>/gi, "");
+
+  // remove markdown-accessiblity-table
+  out = out.replace(
+    /<markdown-accessiblity-table[\s\S]*?<\/markdown-accessiblity-table>/gi,
+    ""
+  );
+
   // hide leftover section headings that reference stripped media (socials, stack, worked with)
   out = out.replace(
     /<(h[1-6]|p|div)[^>]*>\s*(?:🌐\s*)?Socials:?\s*<\/\1>/gi,

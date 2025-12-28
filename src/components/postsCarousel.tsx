@@ -1,47 +1,38 @@
 "use client";
 import * as React from "react"
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-
 import { Carousel, 
     CarouselContent, 
     CarouselItem, 
     CarouselPrevious, 
-    CarouselNext 
+    CarouselNext,
+    type CarouselApi
 } from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
-import { ArrowRight } from "lucide-react";
 
-type Post = {
-    id: string
-    title: string
-    url: string
-    date: string 
-    source: "blog" | "x" | "linkedin"
-    excerpt?: string
+export interface Post {
+    id: string;
+    title: string;
+    url: string;
+    date: string;
+    source: string;
+    excerpt: string;
+    image?: string | null;
 }
 
 const isArabic = (text: string): boolean => /[\u0600-\u06FF\u0750-\u077F]/.test(text)
 
-export default function PostsCarousel() {
-    const [posts, setPosts] = React.useState<Post[]>([])
-    const [loading, setLoading] = React.useState(true)
-    const [api, setApi] = React.useState<any>()
-    const [current, setCurrent] = React.useState(0)
+const getIcon = (source: string) => {
+    if (source === 'x' || source === 'linkedin') {
+        return <img src="https://avatars.githubusercontent.com/u/87912478?v=4" alt="Profile" className="w-full h-full object-cover" />;
+    } else {
+        return <span className="text-xs flex items-center justify-center h-full w-full">📝</span>;
+    }
+};
 
-    React.useEffect(() => {
-        fetch('/posts.json')
-            .then(res => res.json())
-            .then(data => {
-                setPosts(data)
-                setLoading(false)
-            })
-            .catch(err => {
-                console.error('Failed to fetch posts:', err)
-                setLoading(false)
-            })
-    }, [])
+export default function PostsCarousel({ posts }: { posts: Post[] }) {
+    const [api, setApi] = React.useState<CarouselApi>()
+    const [current, setCurrent] = React.useState(0)
 
     React.useEffect(() => {
         if (!api) {
@@ -55,13 +46,22 @@ export default function PostsCarousel() {
         })
     }, [api])
 
-    if (loading) {
-        return <div className="flex justify-center p-8">Loading posts...</div>
-    }
+    const recent = React.useMemo(() => {
+        return [...posts].sort((a, b) => {
+            const dateA = new Date(a.date).getTime();
+            const dateB = new Date(b.date).getTime();
+            
+            // Handle invalid dates by treating them as oldest
+            const validA = !isNaN(dateA);
+            const validB = !isNaN(dateB);
 
-    const recent = posts
-        .sort((a, b) => +new Date(b.date) - +new Date(a.date))
-        .slice(0, 12)
+            if (!validA && !validB) return 0;
+            if (!validA) return 1;
+            if (!validB) return -1;
+
+            return dateB - dateA;
+        });
+    }, [posts]);
 
     return (
         <div className="w-full max-w-full px-2">
@@ -85,51 +85,43 @@ export default function PostsCarousel() {
                   const isCenter = index === current
                   const content = post.excerpt || post.title
                   const isRtl = isArabic(content)
+                  const dateObj = new Date(post.date);
+                  const dateStr = !isNaN(dateObj.getTime()) ? dateObj.toLocaleDateString() : "Recent";
+
                   return (
-                  <CarouselItem key={post.id} className="basis-[90%] sm:basis-[75%] md:basis-[65%] lg:basis-[55%]">
-                     <div className={`px-1 transition-all duration-500 ease-out ${isCenter ? 'scale-100 z-20' : 'scale-95 opacity-50'}`}>
-                      <Card className={`${isCenter ? 'shadow-2xl ring-2 ring-primary/30 bg-background' : 'shadow-sm'}`}>
-                        <CardContent className={`flex flex-col gap-2 ${isCenter ? 'p-4' : 'p-2'}`}>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full overflow-hidden">
-                              {post.source === 'x' ? (
-                                <img 
-                                  src="/x-profile.jpg" 
-                                  alt="X Profile" 
-                                  className="w-full h-full rounded-full object-cover"
-                                />
-                              ) : post.source === 'linkedin' ? (
-                                <img 
-                                  src="/inkedin-profile.jpg" 
-                                  alt="LinkedIn Profile" 
-                                  className="w-full h-full rounded-full object-cover"
-                                />
-                              ) : (
-                                <span className="text-lg">📝</span>
-                              )}
-                            </span>
-                            <span className="capitalize">{post.source}</span>
-                            <span>•</span>
-                            <span>{new Date(post.date).toLocaleDateString()}</span>
-                          </div>
-                          <p dir={isRtl ? "rtl" : "ltr"} className={`leading-snug line-clamp-5 ${isCenter ? 'text-base' : 'text-sm'} ${isRtl ? 'text-right' : 'text-left'}`}>
-                            {content}
-                          </p>
-                        </CardContent>
-                      <Button variant="ghost" size="sm" className={`ml-auto mt-1 opacity-60 hover:opacity-100 px-1 py-0.5 h-auto ${isCenter ? 'text-sm' : 'text-xs'}`} asChild>
-                        <a href={post.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
-                          Read on {post.source}
-                          <ArrowRight className={`${isCenter ? 'w-4 h-4' : 'w-3 h-3'}`} />
-                        </a>
-                      </Button>
-                      </Card>
+                  <CarouselItem key={post.id} className={`basis-[90%] sm:basis-[75%] md:basis-[65%] lg:basis-[55%] pl-4 ${isCenter ? 'is-selected' : ''}`}>
+                     <div className="slide-inner h-full px-1">
+                        <div className="post-card p-4 h-full flex flex-col">
+                            {/* Header */}
+                            <div className="flex items-center gap-2 text-[10px] opacity-70 mb-2 flex-none">
+                                <span className="w-6 h-6 rounded-full bg-[#045C5A] border border-[#F6E5C6]/20 flex items-center justify-center overflow-hidden">
+                                    {getIcon(post.source)}
+                                </span>
+                                <span className="capitalize font-semibold text-[#FFB703]">{post.source}</span>
+                                <span>•</span>
+                                <span className="mono">{dateStr}</span>
+                            </div>
+                            
+                            {/* Content */}
+                            <p className={`${isRtl ? 'rtl text-right' : 'text-left'} text-sm leading-relaxed mb-4 flex-grow line-clamp-4 overflow-hidden`}>
+                                {content}
+                            </p>
+                            
+                            {/* Footer Link */}
+                            <div className="mt-auto pt-2 border-t border-[#F6E5C6]/5 flex justify-end flex-none">
+                                <a href={post.url} target="_blank" className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-[#FFB703] hover:text-white transition-colors">
+                                    Read on {post.source}
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                   </CarouselItem>
                   )
                 })}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
+              <CarouselPrevious className="embla__button embla__prev" />
+              <CarouselNext className="embla__button embla__next" />
             </Carousel>
         </div>
           )

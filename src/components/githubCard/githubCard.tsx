@@ -2,7 +2,7 @@ import Image from "next/image";
 import { fetchGithubUser } from "@/lib/github";
 import { Suspense } from "react";
 import GithubReadme from "./githubReadme";
-import GithubRepos from "./githubRepos";
+import RepoList from "./repoList";
 
 export default async function GithubCard({ username = "salehalobaylan" }: { username?: string }) {
   try {
@@ -37,7 +37,7 @@ export default async function GithubCard({ username = "salehalobaylan" }: { user
             <Suspense> {/* Suspense insure the page don't overlode the website */}
                 <GithubReadme />
             </Suspense>
-            <GithubRepos />
+            <RepoList />
 
       </div>
     );
