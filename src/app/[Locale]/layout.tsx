@@ -7,8 +7,8 @@ export default async function RootLayout({
 }) {
     const { Locale } = await params;
     return (
-        <html lang={Locale}>
-            <body>{children}</body>
-        </html>
+        <div data-locale={Locale} className="min-h-screen">
+            {children}
+        </div>
     );
 }

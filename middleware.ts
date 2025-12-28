@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/api') ||
     /\.(.*)$/.test(pathname)
   ) {
-    return;
+    return NextResponse.next();
   }
 
   if (!hasLocale(pathname)) {
@@ -23,7 +23,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  return;
+  return NextResponse.next();
 }
 
 export const config = {
