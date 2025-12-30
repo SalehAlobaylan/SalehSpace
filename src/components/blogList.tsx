@@ -3,39 +3,12 @@
 const blogsData = [
   {
     id: "b1",
-    title: "Understanding Eventual Consistency",
-    date: "Jun 12, 2024",
+    title: "testing blog component",
+    date: "Jan 1, 2026",
     readTime: "8 min read",
     summary:
-      "In distributed systems, strict consistency is expensive. Here's how to embrace eventual consistency without losing data integrity.",
-    tags: ["System Design", "Database"],
-  },
-  {
-    id: "b2",
-    title: "Optimizing Go Garbage Collection",
-    date: "May 28, 2024",
-    readTime: "12 min read",
-    summary:
-      "A deep dive into GOGC and memory ballast techniques to reduce latency spikes in high-throughput Go services.",
-    tags: ["Go", "Performance"],
-  },
-  {
-    id: "b3",
-    title: "From REST to gRPC: Internal Communication",
-    date: "Apr 15, 2024",
-    readTime: "6 min read",
-    summary:
-      "Why we migrated our internal microservices communication layer to gRPC and the performance benefits we saw.",
-    tags: ["Microservices", "gRPC"],
-  },
-  {
-    id: "b4",
-    title: "Database Sharding Strategies",
-    date: "Mar 02, 2024",
-    readTime: "10 min read",
-    summary:
-      "Horizontal scaling is hard. We explore key-based vs. range-based sharding and how to handle rebalancing.",
-    tags: ["Database", "Scaling"],
+      "This is a test blog post to demonstrate the blog list component functionality.",
+    tags: ["backend", "testing frontend"],
   },
 ];
 

@@ -15,10 +15,14 @@ export default function RepoListClient({ repos }: RepoListClientProps) {
   };
 
   return (
-    <div className="space-y-3 mt-4">
-      {repos.map((repo) => (
-        <div
-          key={repo.id}
+    <div className="mt-4">
+      <h3 className="text-sm font-mono uppercase tracking-wider opacity-50 mb-3">
+        Recent Repositories
+      </h3>
+      <div className="space-y-3">
+        {repos.map((repo) => (
+          <div
+            key={repo.id}
           className={`repo-card bg-[#013837]/40 border border-[#F6E5C6]/5 hover:border-[#F6E5C6]/20 rounded-lg p-4 cursor-pointer transition-all ${
             expandedRepo === repo.id ? "expanded" : ""
           }`}
@@ -63,6 +67,7 @@ export default function RepoListClient({ repos }: RepoListClientProps) {
           </div>
         </div>
       ))}
+      </div>
     </div>
   );
 }

@@ -3,57 +3,14 @@
 const postsData = [
   {
     id: "1",
-    title: "Building Microservices with Go",
+    title: "First static post :)",
     url: "#",
-    date: "2024-05-15",
-    source: "x",
+    date: "2026-01-01",
+    source: "SalehSpace",
     excerpt:
-      "Why I switched from Python to Go for high-throughput microservices. The concurrency model is a game changer. #golang #backend",
+      "First static post to show case the social feed component functionality.",
     image:
-      "https://images.unsplash.com/photo-1661956602116-aa6865609028?w=800&auto=format&fit=crop&q=60",
-  },
-  {
-    id: "2",
-    title: "My journey rebuilding SalehSpace",
-    url: "#",
-    date: "2024-04-10",
-    source: "linkedin",
-    excerpt:
-      "It's been 8 years since my first commit. Rebuilding my portfolio has been a lesson in minimalism and restraint.",
-    image:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=60",
-  },
-  {
-    id: "3",
-    title: "أهمية هيكلة البيانات في الأنظمة الكبيرة",
-    url: "#",
-    date: "2024-03-22",
-    source: "x",
-    excerpt:
-      "في الانظمة المعقدة، تصميم قاعدة البيانات هو الاساس. اذا كان الاساس ضعيف، النظام كله بينهار مع زيادة الحمل.",
-    image: null,
-  },
-  {
-    id: "4",
-    title: "Event-Driven Architecture 101",
-    url: "#",
-    date: "2024-02-18",
-    source: "blog",
-    excerpt:
-      "Decoupling services using Kafka. A deep dive into producers, consumers, and topic partitions.",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=60",
-  },
-  {
-    id: "5",
-    title: "Docker vs Podman",
-    url: "#",
-    date: "2024-01-05",
-    source: "linkedin",
-    excerpt:
-      "Exploring daemonless container engines. Is it time to switch? My thoughts on security and DX.",
-    image:
-      "https://images.unsplash.com/photo-1605745341112-85968b19335b?w=800&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   },
 ];
 
