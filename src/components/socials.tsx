@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { useLocale } from "@/lib/localeContext";
 
 export default function Socials() {
   const { t, isRTL } = useLocale();
+  const [copied, setCopied] = useState(false);
   
   return (
     <div className={`flex flex-wrap justify-center gap-2 md:gap-4 pt-2 pb-4 md:pb-6 ${isRTL ? "flex-row-reverse" : ""}`}>
@@ -56,10 +58,14 @@ export default function Socials() {
         </svg>
         <span className="font-mono">{t.socials.twitter}</span>
       </a>
-      <a
-        href="mailto:salehwleed1@gmail.com"
-        className="flex items-center gap-1.5 text-[10px] md:text-xs hover:text-[#FFB703] transition-colors group"
-        aria-label="Email"
+      <button
+        onClick={() => {
+          navigator.clipboard.writeText("salehwleed1@gmail.com");
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1500);
+        }}
+        className="relative flex items-center gap-1.5 text-[10px] md:text-xs hover:text-[#FFB703] transition-colors group cursor-pointer"
+        aria-label="Copy email to clipboard"
       >
         <svg
           className="w-4 h-4 md:w-4 md:h-4 opacity-70 group-hover:opacity-100"
@@ -75,7 +81,14 @@ export default function Socials() {
           ></path>
         </svg>
         <span className="font-mono">{t.socials.email}</span>
-      </a>
+        <span
+          className={`absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] text-white/60 transition-opacity duration-300 ${copied ? "opacity-100" : "opacity-0"}`}
+          role="status"
+          aria-live="polite"
+        >
+          {t.socials.copied}
+        </span>
+      </button>
     </div>
   );
 }

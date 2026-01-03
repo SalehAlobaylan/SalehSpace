@@ -19,6 +19,7 @@ export const ar: Translation = {
     linkedin: "لينكد إن",
     twitter: "تويتر",
     email: "البريد",
+    copied: "تم النسخ!",
   },
 
   // Tech Stack
