@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter, JetBrains_Mono, Noto_Sans_Arabic } from "next/font/google";
+import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -17,9 +18,27 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-const notoSansArabic = Noto_Sans_Arabic({
-  variable: "--font-noto-sans-arabic",
-  subsets: ["arabic"],
+// SOMAR Arabic Font - Local font
+const somar = localFont({
+  src: [
+    {
+      path: "../../public/fonts/SOMAR-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/SOMAR-Medium.otf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/SOMAR-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-somar",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -35,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable} ${notoSansArabic.variable} antialiased font-sans bg-[#045C5A] text-[#F6E5C6]`}
+        className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable} ${somar.variable} antialiased font-sans bg-[#045C5A] text-[#F6E5C6]`}
       >
         {children}
       </body>

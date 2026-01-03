@@ -5,7 +5,7 @@
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
-  --font-arabic: var(--font-noto-sans-arabic);
+  --font-arabic: var(--font-somar);
 
   --color-bg-main: #045C5A;
   --color-bg-panel: #066D6A;
@@ -121,3 +121,36 @@ body {
     background-color: rgba(1, 56, 55, 0.7);
     transform: translateY(-2px);
 }
+
+/* RTL Support */
+.font-arabic {
+    font-family: var(--font-arabic), sans-serif;
+}
+
+[dir="rtl"] .serif {
+    font-family: var(--font-arabic), serif;
+}
+
+[dir="rtl"] .font-mono {
+    font-family: var(--font-arabic), monospace;
+}
+
+/* RTL-specific adjustments */
+[dir="rtl"] .gap-1\.5 {
+    gap: 0.375rem;
+}
+
+/* Flip icons in RTL if needed */
+[dir="rtl"] .rtl-flip {
+    transform: scaleX(-1);
+}
+
+/* Text alignment for RTL */
+[dir="rtl"] .text-left {
+    text-align: right;
+}
+
+[dir="rtl"] .text-right {
+    text-align: left;
+}
+

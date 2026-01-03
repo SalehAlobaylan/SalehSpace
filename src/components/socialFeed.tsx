@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale } from "@/lib/localeContext";
+
 const postsData = [
   {
     id: "1",
@@ -14,7 +16,7 @@ const postsData = [
   },
 ];
 
-const isArabic = (text: string) => /[\u0600-\u06FF\u0750-\u077F]/.test(text);
+const isArabicText = (text: string) => /[\u0600-\u06FF\u0750-\u077F]/.test(text);
 
 const getIcon = (source: string) => {
   if (source === "x" || source === "linkedin") {
@@ -34,7 +36,28 @@ const getIcon = (source: string) => {
   }
 };
 
+const formatDate = (dateString: string, locale: string) => {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  
+  if (locale === "ar") {
+    // Convert to Arabic-Indic numerals
+    const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    const dayAr = day.toString().split('').map(d => arabicNumerals[parseInt(d)]).join('');
+    const monthAr = month.toString().split('').map(d => arabicNumerals[parseInt(d)]).join('');
+    const yearAr = year.toString().split('').map(d => arabicNumerals[parseInt(d)]).join('');
+    return `${dayAr}/${monthAr}/${yearAr}`;
+  }
+  
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${months[month - 1]} ${day}, ${year}`;
+};
+
 export default function SocialFeed() {
+  const { t, isRTL, locale } = useLocale();
+  
   const sortedPosts = postsData.sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
@@ -43,25 +66,25 @@ export default function SocialFeed() {
     <div className="space-y-4">
       {sortedPosts.map((post) => {
         const content = post.excerpt || post.title;
-        const isRtl = isArabic(content);
-        const dateStr = new Date(post.date).toLocaleDateString();
+        const isRtlContent = isArabicText(content);
+        const dateStr = formatDate(post.date, locale);
 
         return (
           <article
             key={post.id}
-            className="blog-card rounded-lg p-5 cursor-pointer"
+            className={`blog-card rounded-lg p-5 cursor-pointer ${isRTL ? "text-right" : ""}`}
           >
-            <div className="flex justify-between items-start mb-3">
-              <div className="flex items-center gap-2">
+            <div className={`flex justify-between items-start mb-3 ${isRTL ? "flex-row-reverse" : ""}`}>
+              <div className={`flex items-center gap-2 ${isRTL ? "flex-row-reverse" : ""}`}>
                 <span className="w-8 h-8 rounded-full bg-[#045C5A] border border-[#F6E5C6]/20 flex items-center justify-center overflow-hidden">
                   {getIcon(post.source)}
                 </span>
-                <div className="flex flex-col">
+                <div className={`flex flex-col ${isRTL ? "text-right" : ""}`}>
                   <span className="capitalize font-bold text-sm text-[#F6E5C6] leading-none">
-                    Saleh Alobaylan
+                    {isRTL ? "صالح العبيلان" : "Saleh Alobaylan"}
                   </span>
-                  <span className="text-[10px] opacity-60 flex gap-1 items-center">
-                    via <span className="text-[#FFB703]">{post.source}</span>
+                  <span className={`text-[10px] opacity-60 flex gap-1 items-center ${isRTL ? "flex-row-reverse" : ""}`}>
+                    {t.posts.via} <span className="text-[#FFB703]">{post.source}</span>
                   </span>
                 </div>
               </div>
@@ -72,7 +95,7 @@ export default function SocialFeed() {
 
             <p
               className={`${
-                isRtl ? "rtl text-right" : "text-left"
+                isRtlContent || isRTL ? "rtl text-right" : "text-left"
               } text-sm opacity-90 leading-relaxed mb-4`}
             >
               {content}
@@ -88,15 +111,15 @@ export default function SocialFeed() {
               </div>
             )}
 
-            <div className="flex justify-end border-t border-[#F6E5C6]/10 pt-3 mt-2">
+            <div className={`flex justify-end border-t border-[#F6E5C6]/10 pt-3 mt-2 ${isRTL ? "justify-start" : ""}`}>
               <a
                 href={post.url}
                 target="_blank"
-                className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-[#F6E5C6] hover:text-[#FFB703] transition-colors"
+                className={`flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-[#F6E5C6] hover:text-[#FFB703] transition-colors ${isRTL ? "flex-row-reverse" : ""}`}
               >
-                View on {post.source}
+                {t.posts.viewOn} {post.source}
                 <svg
-                  className="w-3 h-3"
+                  className={`w-3 h-3 ${isRTL ? "rotate-180" : ""}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

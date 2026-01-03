@@ -1,67 +1,76 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale } from "@/lib/localeContext";
 
 type TechItem = {
   i: string;
+  key: string;
   alt: string;
-  desc: string;
+  customSrc?: string;
 };
 
 type ShieldItem = {
   src: string;
+  key: string;
   alt: string;
-  desc: string;
 };
 
 const mainStack: TechItem[] = [
-  { i: "ts", alt: "TypeScript", desc: "Used it primarily in production" },
-  { i: "js", alt: "JavaScript", desc: "Used it primarily in production served more than 20k monthly active user with it" },
-  { i: "go", alt: "Go", desc: "built with it many scalable production-ready Services and systems, 'one of them will be connected with this website soon:)'" },
-  { i: "nextjs", alt: "Next.js", desc: "I'm not a frontend engineer but if I'm fullstacking i'm using Next.js." },
-  { i: "postgres", alt: "PostgreSQL", desc: "used it for production, served with it more than 20k monthly active users." },
-  { i: "supabase", alt: "Supabase", desc: "My main cloud development database provider." },
-  { i: "aws", alt: "AWS", desc: "Deployed scalable apps using EC2, S3, IAM, and RDS for cloud infrastructure and used RDS for production." },
+  { i: "ts", key: "ts", alt: "TypeScript" },
+  { i: "js", key: "js", alt: "JavaScript" },
+  { i: "go", key: "go", alt: "Go" },
+  { i: "nextjs", key: "nextjs", alt: "Next.js" },
+  { i: "postgres", key: "postgres", alt: "PostgreSQL" },
+  { i: "supabase", key: "supabase", alt: "Supabase" },
+  { i: "aws", key: "aws", alt: "AWS" },
 ];
 
 const workedWithStack: TechItem[] = [
-  { i: "python", alt: "Python", desc: "Used it for data Analysis with numpy, pandas, matplotlib." },
-  { i: "java", alt: "Java", desc: "Started with it for fundementals, OOP, Data structures." },
-  { i: "express", alt: "Express", desc: "Most of my project is built with it" },
-  { i: "angular", alt: "Angular", desc: "only limited usecases." },
-  { i: "sqlite", alt: "SQLite", desc: "Lightweight database used it for scalable production then had to migrate from it because of bottleneck :)" },
-  { i: "mongodb", alt: "MongoDB", desc: "NoSQL database used it for not scalable usecases just basics." },
-  { i: "redis", alt: "Redis", desc: "In-memory caching used it for caching access tokens and rate limiting." },
-  { i: "postman", alt: "Postman", desc: "API testing and documentation for backend development workflows." },
-  { i: "docker", alt: "Docker", desc: "Containerized applications for consistent dev/prod environments." },
-  { i: "notion", alt: "Notion", desc: "used its SDK for light databases integration and project management, and documentation." },
-  { i: "firebase", alt: "Firebase", desc: "Used for authentication primarily." },
-  { i: "tailwind", alt: "Tailwind", desc: "Used primarily with Next.js." },
+  { i: "python", key: "python", alt: "Python" },
+  { i: "java", key: "java", alt: "Java" },
+  { i: "express", key: "express", alt: "Express" },
+  { i: "angular", key: "angular", alt: "Angular" },
+  { i: "sqlite", key: "sqlite", alt: "SQLite" },
+  { i: "mongodb", key: "mongodb", alt: "MongoDB" },
+  { i: "redis", key: "redis", alt: "Redis" },
+  { i: "cursor", key: "cursor", alt: "Cursor", customSrc: "https://www.cursor.com/assets/images/logo.svg" },
+  { i: "postman", key: "postman", alt: "Postman" },
+  { i: "docker", key: "docker", alt: "Docker" },
+  { i: "notion", key: "notion", alt: "Notion" },
+  { i: "firebase", key: "firebase", alt: "Firebase" },
+  { i: "tailwind", key: "tailwind", alt: "Tailwind" },
 ];
 
 const shieldStack: ShieldItem[] = [
-  { src: "https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white", alt: "Jira", desc: "Agile project management for sprint planning and issue tracking." },
-  { src: "https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white", alt: "Jest", desc: "my main tool for testing." },
-  { src: "https://img.shields.io/badge/CircleCI-343434?style=for-the-badge&logo=circleci&logoColor=white", alt: "CircleCI", desc: "CI/CD pipeline for automated testing and deployment." },
-  { src: "https://img.shields.io/badge/jasmine-%238A4182.svg?style=for-the-badge&logo=jasmine&logoColor=white", alt: "Jasmine", desc: "used it for my early projects but not anymore." },
-  { src: "https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens", alt: "JWT", desc: "many production usages for me [large systems, microservices, modular monoliths, with refreshed tokens]." },
-  { src: "https://img.shields.io/badge/Microservices-gray?style=for-the-badge&logo=hexagonal-architecture&logoColor=white", alt: "Microservices", desc: "usually when i build a system i start with designing it as microservices, then gathering it to smaller approches as needed and projects limits, but my mind always *Microservicing*." },
-  { src: "https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white", alt: "Shadcn/UI", desc: "I don't like to frontend so usually i start with this :)." },
+  { src: "https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white", key: "jira", alt: "Jira" },
+  { src: "https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white", key: "jest", alt: "Jest" },
+  { src: "https://img.shields.io/badge/CircleCI-343434?style=for-the-badge&logo=circleci&logoColor=white", key: "circleci", alt: "CircleCI" },
+  { src: "https://img.shields.io/badge/jasmine-%238A4182.svg?style=for-the-badge&logo=jasmine&logoColor=white", key: "jasmine", alt: "Jasmine" },
+  { src: "https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens", key: "jwt", alt: "JWT" },
+  { src: "https://img.shields.io/badge/Microservices-gray?style=for-the-badge&logo=hexagonal-architecture&logoColor=white", key: "microservices", alt: "Microservices" },
+  { src: "https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white", key: "shadcn", alt: "Shadcn/UI" },
 ];
 
 export default function TechStack() {
   const [showWorkedWith, setShowWorkedWith] = useState(false);
   const [selectedTech, setSelectedTech] = useState<string | null>(null);
-  const [selectedDesc, setSelectedDesc] = useState<string | null>(null);
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const { t, isRTL } = useLocale();
 
-  const handleTechClick = (alt: string, desc: string) => {
+  const handleTechClick = (alt: string, key: string) => {
     if (selectedTech === alt) {
       setSelectedTech(null);
-      setSelectedDesc(null);
+      setSelectedKey(null);
     } else {
       setSelectedTech(alt);
-      setSelectedDesc(desc);
+      setSelectedKey(key);
     }
+  };
+
+  const getDescription = (key: string | null): string => {
+    if (!key) return "";
+    return t.tech[key as keyof typeof t.tech] || "";
   };
 
   return (
@@ -69,19 +78,19 @@ export default function TechStack() {
       {/* Stacked in these (Always Visible) */}
       <div className="text-center relative">
         <h3 className="serif text-xl font-bold mb-4 text-[#F6E5C6]">
-          Stacked in these <span className="text-[9px] font-normal text-[#F6E5C6]/25 italic ml-1">click on each to show</span>
+          {t.techStack.stackedIn} <span className="text-[9px] font-normal text-[#F6E5C6]/25 italic mx-1">{t.techStack.clickToShow}</span>
         </h3>
         <div className="flex flex-wrap justify-center gap-1 md:gap-2">
           {mainStack.map((tech) => (
             <button
               key={tech.i}
-              onClick={() => handleTechClick(tech.alt, tech.desc)}
+              onClick={() => handleTechClick(tech.alt, tech.key)}
               className={`hover:scale-110 transition-all cursor-pointer rounded-lg ${
                 selectedTech === tech.alt ? "ring-2 ring-[#FFB703] scale-110" : ""
               }`}
             >
               <img
-                src={`https://skillicons.dev/icons?i=${tech.i}`}
+                src={tech.customSrc || `https://skillicons.dev/icons?i=${tech.i}`}
                 alt={tech.alt}
                 height="40"
                 className="h-[40px]"
@@ -92,9 +101,9 @@ export default function TechStack() {
         
         {/* Description Display for Main Stack */}
         {selectedTech && mainStack.some(t => t.alt === selectedTech) && (
-          <div className="mt-4 p-3 bg-[#F6E5C6]/5 rounded-lg border border-[#F6E5C6]/10 animate-in fade-in duration-200">
+          <div className={`mt-4 p-3 bg-[#F6E5C6]/5 rounded-lg border border-[#F6E5C6]/10 animate-in fade-in duration-200 ${isRTL ? "text-right" : "text-left"}`}>
             <p className="text-sm text-[#F6E5C6]/80">
-              <span className="font-semibold text-[#FFB703]">{selectedTech}:</span> {selectedDesc}
+              <span className="font-semibold text-[#FFB703]">{selectedTech}:</span> {getDescription(selectedKey)}
             </p>
           </div>
         )}
@@ -106,7 +115,7 @@ export default function TechStack() {
           onClick={() => setShowWorkedWith(!showWorkedWith)}
           className="text-xs text-[#FFB703] border border-[#FFB703]/30 px-4 py-2 rounded-full hover:bg-[#FFB703] hover:text-[#045C5A] transition-colors"
         >
-          {showWorkedWith ? "Show Less ↑" : "View Worked With ↓"}
+          {showWorkedWith ? t.techStack.showLess : t.techStack.viewWorkedWith}
         </button>
       </div>
 
@@ -117,7 +126,7 @@ export default function TechStack() {
         } md:block`}
       >
         <h3 className="serif text-xl font-bold mb-4 text-[#F6E5C6]">
-          And worked with these
+          {t.techStack.workedWith}
         </h3>
 
         {/* Row 1: Skill Icons */}
@@ -125,13 +134,13 @@ export default function TechStack() {
           {workedWithStack.map((tech) => (
             <button
               key={tech.i}
-              onClick={() => handleTechClick(tech.alt, tech.desc)}
+              onClick={() => handleTechClick(tech.alt, tech.key)}
               className={`hover:scale-110 transition-all cursor-pointer rounded-lg ${
                 selectedTech === tech.alt ? "ring-2 ring-[#FFB703] scale-110" : ""
               }`}
             >
               <img
-                src={`https://skillicons.dev/icons?i=${tech.i}`}
+                src={tech.customSrc || `https://skillicons.dev/icons?i=${tech.i}`}
                 height="35"
                 className="h-[35px]"
                 alt={tech.alt}
@@ -145,7 +154,7 @@ export default function TechStack() {
           {shieldStack.map((shield) => (
             <button
               key={shield.alt}
-              onClick={() => handleTechClick(shield.alt, shield.desc)}
+              onClick={() => handleTechClick(shield.alt, shield.key)}
               className={`hover:opacity-80 transition-all cursor-pointer rounded ${
                 selectedTech === shield.alt ? "ring-2 ring-[#FFB703]" : ""
               }`}
@@ -157,9 +166,9 @@ export default function TechStack() {
 
         {/* Description Display for Worked With Stack */}
         {selectedTech && (workedWithStack.some(t => t.alt === selectedTech) || shieldStack.some(t => t.alt === selectedTech)) && (
-          <div className="mt-4 p-3 bg-[#F6E5C6]/5 rounded-lg border border-[#F6E5C6]/10 animate-in fade-in duration-200">
+          <div className={`mt-4 p-3 bg-[#F6E5C6]/5 rounded-lg border border-[#F6E5C6]/10 animate-in fade-in duration-200 ${isRTL ? "text-right" : "text-left"}`}>
             <p className="text-sm text-[#F6E5C6]/80">
-              <span className="font-semibold text-[#FFB703]">{selectedTech}:</span> {selectedDesc}
+              <span className="font-semibold text-[#FFB703]">{selectedTech}:</span> {getDescription(selectedKey)}
             </p>
           </div>
         )}

@@ -3,43 +3,28 @@ import { fetchGithubUser } from "@/lib/github";
 import { Suspense } from "react";
 import GithubReadme from "./githubReadme";
 import RepoList from "./repoList";
+import GithubCardClient from "./githubCardClient";
 
 export default async function GithubCard({ username = "salehalobaylan" }: { username?: string }) {
   try {
     const user = await fetchGithubUser(username);
     return (
-      <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-4xl mx-auto rounded-xl border border-neutral-200/20 bg-neutral-900/40 p-3 sm:p-4 md:p-6 text-neutral-200">
-        <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
-          <Image
-            src={user.avatar_url}
-            alt={`${user.login} avatar`}
-            width={64}
-            height={64}
-            className="rounded-full border border-neutral-700 sm:w-[80px] sm:h-[80px] md:w-[96px] md:h-[96px]"
-          />
-          <div className="flex flex-col min-w-0 flex-1">
-            <a href={user.html_url} target="_blank" rel="noreferrer" className="text-base sm:text-lg md:text-2xl font-semibold hover:underline truncate">
-              {user.name ?? user.login}
-            </a>
-            {user.bio ? (
-              <p className="text-xs sm:text-sm md:text-base text-neutral-400 line-clamp-2">{user.bio}</p>
-            ) : null}
-            <div className="mt-1 text-xs sm:text-sm text-neutral-400">
-              Followers {user.followers} • Repos {user.public_repos}
-            </div>
-          </div>
-        </div>
-        <div className="mt-3 sm:mt-4 md:mt-6 text-right text-xs sm:text-sm">
-          <a href={user.html_url} target="_blank" rel="noreferrer" className="text-neutral-400 hover:underline">
-            View on GitHub →
-          </a>
-        </div>
-            <Suspense> {/* Suspense insure the page don't overlode the website */}
-                <GithubReadme />
-            </Suspense>
-            <RepoList />
-
-      </div>
+      <GithubCardClient
+        user={{
+          avatar_url: user.avatar_url,
+          login: user.login,
+          name: user.name,
+          bio: user.bio,
+          html_url: user.html_url,
+          followers: user.followers,
+          public_repos: user.public_repos,
+        }}
+      >
+        <Suspense>
+          <GithubReadme />
+        </Suspense>
+        <RepoList />
+      </GithubCardClient>
     );
   } catch {
     return (
