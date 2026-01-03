@@ -43,8 +43,8 @@ export default function HomeClient({ githubSection, posts }: { githubSection: Re
             {[
               { id: "overview", label: "Overview" },
               { id: "github", label: "GitHub" },
-              { id: "blogs", label: "Blogs" },
-              { id: "posts", label: "Posts" },
+              // { id: "blogs", label: "Blogs" },
+              // { id: "posts", label: "Posts" },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -74,7 +74,7 @@ export default function HomeClient({ githubSection, posts }: { githubSection: Re
           >
             {/* CAROUSEL CONTAINER */}
             <div className="w-full mb-4 relative hidden md:block">
-              <PostsCarousel posts={posts} />
+              {/* <PostsCarousel posts={posts} /> */}
             </div>
 
             {/* Links (Condensed) */}

@@ -16,37 +16,37 @@ type ShieldItem = {
 
 const mainStack: TechItem[] = [
   { i: "ts", alt: "TypeScript", desc: "Used it primarily in production" },
-  { i: "js", alt: "JavaScript", desc: "UUsed it primarily in production served more than 20k monthly active user with it" },
-  { i: "go", alt: "Go", desc: "built with it many scalable production-ready projects" },
-  { i: "express", alt: "Express", desc: "Most of my pproject with it" },
-  { i: "nextjs", alt: "Next.js", desc: "Full-stack React framework I use for SSR, API routes, and this portfolio site." },
-  { i: "postgres", alt: "PostgreSQL", desc: "Reliable relational database for complex queries and data integrity in production apps." },
-  { i: "aws", alt: "AWS", desc: "Deployed scalable apps using EC2, S3, Lambda, and RDS for cloud infrastructure." },
+  { i: "js", alt: "JavaScript", desc: "Used it primarily in production served more than 20k monthly active user with it" },
+  { i: "go", alt: "Go", desc: "built with it many scalable production-ready Services and systems, 'one of them will be connected with this website soon:)'" },
+  { i: "nextjs", alt: "Next.js", desc: "I'm not a frontend engineer but if I'm fullstacking i'm using Next.js." },
+  { i: "postgres", alt: "PostgreSQL", desc: "used it for production, served with it more than 20k monthly active users." },
+  { i: "supabase", alt: "Supabase", desc: "My main cloud development database provider." },
+  { i: "aws", alt: "AWS", desc: "Deployed scalable apps using EC2, S3, IAM, and RDS for cloud infrastructure and used RDS for production." },
 ];
 
 const workedWithStack: TechItem[] = [
-  { i: "python", alt: "Python", desc: "Used for data processing, scripting, and building automation tools." },
-  { i: "java", alt: "Java", desc: "Built enterprise applications and learned OOP fundamentals." },
-  { i: "angular", alt: "Angular", desc: "Developed component-based SPAs with TypeScript and RxJS." },
-  { i: "sqlite", alt: "SQLite", desc: "Lightweight database for local development and mobile apps." },
-  { i: "mongodb", alt: "MongoDB", desc: "NoSQL database for flexible schema and rapid prototyping." },
-  { i: "redis", alt: "Redis", desc: "In-memory caching for session management and performance optimization." },
+  { i: "python", alt: "Python", desc: "Used it for data Analysis with numpy, pandas, matplotlib." },
+  { i: "java", alt: "Java", desc: "Started with it for fundementals, OOP, Data structures." },
+  { i: "express", alt: "Express", desc: "Most of my project is built with it" },
+  { i: "angular", alt: "Angular", desc: "only limited usecases." },
+  { i: "sqlite", alt: "SQLite", desc: "Lightweight database used it for scalable production then had to migrate from it because of bottleneck :)" },
+  { i: "mongodb", alt: "MongoDB", desc: "NoSQL database used it for not scalable usecases just basics." },
+  { i: "redis", alt: "Redis", desc: "In-memory caching used it for caching access tokens and rate limiting." },
   { i: "postman", alt: "Postman", desc: "API testing and documentation for backend development workflows." },
   { i: "docker", alt: "Docker", desc: "Containerized applications for consistent dev/prod environments." },
-  { i: "notion", alt: "Notion", desc: "Project management and documentation for team collaboration." },
-  { i: "supabase", alt: "Supabase", desc: "Open-source Firebase alternative for auth and real-time databases." },
-  { i: "firebase", alt: "Firebase", desc: "Used for authentication, hosting, and real-time data sync." },
-  { i: "tailwind", alt: "Tailwind", desc: "Utility-first CSS framework for rapid, responsive UI development." },
+  { i: "notion", alt: "Notion", desc: "used its SDK for light databases integration and project management, and documentation." },
+  { i: "firebase", alt: "Firebase", desc: "Used for authentication primarily." },
+  { i: "tailwind", alt: "Tailwind", desc: "Used primarily with Next.js." },
 ];
 
 const shieldStack: ShieldItem[] = [
   { src: "https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white", alt: "Jira", desc: "Agile project management for sprint planning and issue tracking." },
-  { src: "https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white", alt: "Jest", desc: "JavaScript testing framework for unit and integration tests." },
+  { src: "https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white", alt: "Jest", desc: "my main tool for testing." },
   { src: "https://img.shields.io/badge/CircleCI-343434?style=for-the-badge&logo=circleci&logoColor=white", alt: "CircleCI", desc: "CI/CD pipeline for automated testing and deployment." },
-  { src: "https://img.shields.io/badge/jasmine-%238A4182.svg?style=for-the-badge&logo=jasmine&logoColor=white", alt: "Jasmine", desc: "BDD testing framework for Angular and JavaScript projects." },
-  { src: "https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens", alt: "JWT", desc: "Secure token-based authentication for API authorization." },
-  { src: "https://img.shields.io/badge/Microservices-gray?style=for-the-badge&logo=hexagonal-architecture&logoColor=white", alt: "Microservices", desc: "Designed distributed systems with independent, scalable services." },
-  { src: "https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white", alt: "Shadcn/UI", desc: "Modern React component library for beautiful, accessible UIs." },
+  { src: "https://img.shields.io/badge/jasmine-%238A4182.svg?style=for-the-badge&logo=jasmine&logoColor=white", alt: "Jasmine", desc: "used it for my early projects but not anymore." },
+  { src: "https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens", alt: "JWT", desc: "many production usages for me [large systems, microservices, modular monoliths, with refreshed tokens]." },
+  { src: "https://img.shields.io/badge/Microservices-gray?style=for-the-badge&logo=hexagonal-architecture&logoColor=white", alt: "Microservices", desc: "usually when i build a system i start with designing it as microservices, then gathering it to smaller approches as needed and projects limits, but my mind always *Microservicing*." },
+  { src: "https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white", alt: "Shadcn/UI", desc: "I don't like to frontend so usually i start with this :)." },
 ];
 
 export default function TechStack() {
@@ -83,8 +83,8 @@ export default function TechStack() {
               <img
                 src={`https://skillicons.dev/icons?i=${tech.i}`}
                 alt={tech.alt}
-                height="45"
-                className="h-[45px]"
+                height="40"
+                className="h-[40px]"
               />
             </button>
           ))}
