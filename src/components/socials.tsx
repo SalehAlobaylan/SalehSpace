@@ -2,12 +2,25 @@
 
 import { useState } from "react";
 import { useLocale } from "@/lib/localeContext";
+import ContactModal from "@/components/contactModal";
 
 export default function Socials() {
   const { t, isRTL } = useLocale();
-  const [copied, setCopied] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [showCopiedNotification, setShowCopiedNotification] = useState(false);
+
+  const handleEmailClick = () => {
+    // Copy email to clipboard
+    navigator.clipboard.writeText("salehwleed1@gmail.com");
+    setShowCopiedNotification(true);
+    setShowContactModal(true);
+    
+    // Hide the notification after 3 seconds
+    setTimeout(() => setShowCopiedNotification(false), 3000);
+  };
   
   return (
+    <>
     <div className={`flex flex-wrap justify-center gap-2 md:gap-4 pt-2 pb-4 md:pb-6 ${isRTL ? "flex-row-reverse" : ""}`}>
       <a
         href="https://github.com/SalehAlobaylan"
@@ -59,11 +72,7 @@ export default function Socials() {
         <span className="font-mono">{t.socials.twitter}</span>
       </a>
       <button
-        onClick={() => {
-          navigator.clipboard.writeText("salehwleed1@gmail.com");
-          setCopied(true);
-          setTimeout(() => setCopied(false), 1500);
-        }}
+        onClick={handleEmailClick}
         className="relative flex items-center gap-1.5 text-[10px] md:text-xs hover:text-[#FFB703] transition-colors group cursor-pointer"
         aria-label="Copy email to clipboard"
       >
@@ -81,14 +90,15 @@ export default function Socials() {
           ></path>
         </svg>
         <span className="font-mono">{t.socials.email}</span>
-        <span
-          className={`absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] text-white/60 transition-opacity duration-300 ${copied ? "opacity-100" : "opacity-0"}`}
-          role="status"
-          aria-live="polite"
-        >
-          {t.socials.copied}
-        </span>
       </button>
     </div>
+
+    {/* Contact Modal */}
+    <ContactModal 
+      isOpen={showContactModal} 
+      onClose={() => setShowContactModal(false)}
+      showCopiedNotification={showCopiedNotification}
+    />
+    </>
   );
 }

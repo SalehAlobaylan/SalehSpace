@@ -14,6 +14,22 @@ export interface Translation {
     email: string;
     copied: string;
   };
+  contact: {
+    title: string;
+    subtitle: string;
+    name: string;
+    namePlaceholder: string;
+    email: string;
+    emailPlaceholder: string;
+    message: string;
+    messagePlaceholder: string;
+    send: string;
+    sending: string;
+    success: string;
+    error: string;
+    close: string;
+    emailCopied: string;
+  };
   techStack: {
     stackedIn: string;
     clickToShow: string;
@@ -96,6 +112,24 @@ export const en: Translation = {
     twitter: "Twitter",
     email: "Email",
     copied: "Copied!",
+  },
+
+  // Contact
+  contact: {
+    title: "Get in Touch",
+    subtitle: "Send me a message",
+    name: "Name / Organization",
+    namePlaceholder: "Your name / organization",
+    email: "Email",
+    emailPlaceholder: "your@email.com",
+    message: "Message",
+    messagePlaceholder: "Your message...",
+    send: "Send Message",
+    sending: "Sending...",
+    success: "Message sent successfully!",
+    error: "Failed to send message. Please try again.",
+    close: "Close",
+    emailCopied: "Email Copied!",
   },
 
   // Tech Stack

@@ -22,6 +22,24 @@ export const ar: Translation = {
     copied: "تم النسخ!",
   },
 
+  // Contact
+  contact: {
+    title: "تواصل معي",
+    subtitle: "أرسل لي رسالة",
+    name: "الاسم/الجهة",
+    namePlaceholder: "اسمك أو جهتك",
+    email: "البريد الإلكتروني",
+    emailPlaceholder: "بريدك@email.com",
+    message: "الرسالة",
+    messagePlaceholder: "رسالتك...",
+    send: "إرسال الرسالة",
+    sending: "جاري الإرسال...",
+    success: "تم إرسال الرسالة بنجاح!",
+    error: "فشل إرسال الرسالة. حاول مرة أخرى.",
+    close: "إغلاق",
+    emailCopied: "تم نسخ البريد!",
+  },
+
   // Tech Stack
   techStack: {
     stackedIn: "تقنياتي الأساسية",
