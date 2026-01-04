@@ -33,7 +33,7 @@ body {
 
 .serif { font-family: var(--font-serif), serif; }
 .mono { font-family: var(--font-mono), monospace; }
-.rtl { direction: rtl; font-family: var(--font-arabic), sans-serif; }
+.rtl { direction: rtl; font-family: var(--font-arabic), "Geeza Pro", "SF Arabic", sans-serif; }
 
 /* Abstract Background Animations */
 .blob {
@@ -124,11 +124,27 @@ body {
 
 /* RTL Support */
 .font-arabic {
-    font-family: var(--font-arabic), sans-serif;
+    font-family: var(--font-arabic), "Geeza Pro", "Arabic Typesetting", "Simplified Arabic", sans-serif;
+}
+
+/* Safari-specific Arabic font fallback */
+@supports (-webkit-touch-callout: none) or (hanging-punctuation: first) {
+    .font-arabic {
+        font-family: "Geeza Pro", "SF Arabic", var(--font-arabic), "Arabic Typesetting", sans-serif;
+    }
+}
+
+/* Safari detection via media query */
+@media not all and (min-resolution:.001dpcm) {
+    @supports (-webkit-appearance:none) {
+        .font-arabic {
+            font-family: "Geeza Pro", "SF Arabic", var(--font-arabic), "Arabic Typesetting", sans-serif;
+        }
+    }
 }
 
 [dir="rtl"] .serif {
-    font-family: var(--font-arabic), serif;
+    font-family: var(--font-arabic), "Geeza Pro", serif;
 }
 
 [dir="rtl"] .font-mono {

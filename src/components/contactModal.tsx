@@ -37,20 +37,30 @@ export default function ContactModal({ isOpen, onClose, showCopiedNotification }
     e.preventDefault();
     setStatus("sending");
 
-    // Create mailto link with form data
-    const subject = encodeURIComponent(`Message from ${formData.name}`);
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-    );
-    
-    window.location.href = `mailto:salehwleed1@gmail.com?subject=${subject}&body=${body}`;
-    
-    setStatus("success");
-    setTimeout(() => {
-      setFormData({ name: "", email: "", message: "" });
-      setStatus("idle");
-      onClose();
-    }, 2000);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
+
+      setStatus("success");
+      setTimeout(() => {
+        setFormData({ name: "", email: "", message: "" });
+        setStatus("idle");
+        onClose();
+      }, 2000);
+    } catch (error) {
+      console.error("Contact form error:", error);
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 3000);
+    }
   };
 
   if (!isOpen) return null;
@@ -67,25 +77,26 @@ export default function ContactModal({ isOpen, onClose, showCopiedNotification }
       <div 
         className={`relative w-full max-w-md bg-[#066D6A] border border-[#F6E5C6]/20 rounded-2xl shadow-2xl p-6 md:p-8 transform transition-all duration-300 ${isRTL ? "text-right" : ""}`}
         onClick={(e) => e.stopPropagation()}
+        dir={isRTL ? "rtl" : "ltr"}
       >
         {/* Copied Notification Banner */}
         <div
-          className={`absolute -top-12 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#FFB703] text-[#013837] font-bold rounded-full shadow-lg transform transition-all duration-500 flex items-center gap-2 ${
+          className={`absolute -top-14 left-1/2 -translate-x-1/2 mx-4 px-5 py-2.5 bg-[#FFB703] text-[#013837] font-semibold rounded-lg shadow-lg transform transition-all duration-400 flex items-center gap-2 ${
             showCopiedNotification 
               ? "opacity-100 translate-y-0 scale-100" 
               : "opacity-0 -translate-y-4 scale-95 pointer-events-none"
           }`}
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
           </svg>
-          <span>{t.contact.emailCopied}</span>
+          <span className={`text-sm ${isRTL ? "font-arabic" : ""}`}>{t.contact.emailCopied}</span>
         </div>
 
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-[#F6E5C6]/60 hover:text-[#FFB703] transition-colors rounded-lg hover:bg-[#013837]/30"
+          className={`absolute top-4 ${isRTL ? "left-4" : "right-4"} p-2 text-[#F6E5C6]/60 hover:text-[#FFB703] transition-colors rounded-lg hover:bg-[#013837]/30`}
           aria-label={t.contact.close}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,13 +105,10 @@ export default function ContactModal({ isOpen, onClose, showCopiedNotification }
         </button>
 
         {/* Header */}
-        <div className="mb-6">
+        <div className={`mb-6 ${isRTL ? "text-right" : "text-left"}`}>
           <h2 className={`text-2xl font-bold text-[#F6E5C6] mb-1 ${isRTL ? "font-arabic" : ""}`}>
             {t.contact.title}
           </h2>
-          <p className={`text-sm text-[#F6E5C6]/60 ${isRTL ? "font-arabic" : ""}`}>
-            {t.contact.subtitle}
-          </p>
         </div>
 
         {/* Form */}
@@ -109,7 +117,7 @@ export default function ContactModal({ isOpen, onClose, showCopiedNotification }
           <div>
             <label 
               htmlFor="name" 
-              className={`block text-sm font-medium text-[#F6E5C6]/80 mb-1.5 ${isRTL ? "font-arabic" : ""}`}
+              className={`block text-sm font-medium text-[#F6E5C6]/80 mb-1.5 ${isRTL ? "font-arabic text-right" : "text-left"}`}
             >
               {t.contact.name}
             </label>
@@ -128,7 +136,7 @@ export default function ContactModal({ isOpen, onClose, showCopiedNotification }
           <div>
             <label 
               htmlFor="email" 
-              className={`block text-sm font-medium text-[#F6E5C6]/80 mb-1.5 ${isRTL ? "font-arabic" : ""}`}
+              className={`block text-sm font-medium text-[#F6E5C6]/80 mb-1.5 ${isRTL ? "font-arabic text-right" : "text-left"}`}
             >
               {t.contact.email}
             </label>
@@ -147,7 +155,7 @@ export default function ContactModal({ isOpen, onClose, showCopiedNotification }
           <div>
             <label 
               htmlFor="message" 
-              className={`block text-sm font-medium text-[#F6E5C6]/80 mb-1.5 ${isRTL ? "font-arabic" : ""}`}
+              className={`block text-sm font-medium text-[#F6E5C6]/80 mb-1.5 ${isRTL ? "font-arabic text-right" : "text-left"}`}
             >
               {t.contact.message}
             </label>
