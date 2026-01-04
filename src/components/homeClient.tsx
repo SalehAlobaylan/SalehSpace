@@ -25,10 +25,10 @@ export default function HomeClient({ githubSection, posts }: { githubSection: Re
         <header className="flex-none p-4 md:p-8 border-b border-[#F6E5C6]/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-6 z-10 bg-transparent md:bg-[#066D6A]/50">
           <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
             <div className={isRTL ? "text-right" : ""}>
-              <h1 className="serif text-xl md:text-2xl font-bold tracking-tight">
+              <h1 className={`text-xl md:text-2xl font-bold tracking-tight ${isRTL ? "font-arabic" : "serif"}`}>
                 {t.name}
               </h1>
-              <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] opacity-60 font-medium">
+              <p className={`text-[10px] md:text-xs uppercase tracking-[0.2em] opacity-60 font-medium ${isRTL ? "font-arabic" : ""}`}>
                 {t.role}
               </p>
             </div>
@@ -134,7 +134,7 @@ export default function HomeClient({ githubSection, posts }: { githubSection: Re
         </div>
 
         {/* Subtle Footer in Panel */}
-        <footer className="flex-none p-4 text-center border-t border-[#F6E5C6]/5 text-[10px] uppercase tracking-widest opacity-30 font-mono">
+        <footer className={`flex-none p-4 text-center border-t border-[#F6E5C6]/5 text-[10px] uppercase tracking-widest opacity-30 ${isRTL ? "font-arabic" : "font-mono"}`}>
           {t.footer}
         </footer>
       </main>
