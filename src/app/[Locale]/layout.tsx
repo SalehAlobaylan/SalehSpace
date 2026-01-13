@@ -1,4 +1,5 @@
 import { LocaleProvider } from "@/lib/localeContext";
+import { AuthProvider } from "@/lib/authContext";
 import { Locale as LocaleType, isValidLocale } from "@/lib/i18n";
 
 export default async function LocaleLayout({
@@ -14,13 +15,15 @@ export default async function LocaleLayout({
     
     return (
         <LocaleProvider locale={locale}>
-            <div 
-                data-locale={locale} 
-                dir={isRTL ? "rtl" : "ltr"}
-                className={`min-h-screen ${isRTL ? "font-arabic" : ""}`}
-            >
-                {children}
-            </div>
+            <AuthProvider>
+                <div 
+                    data-locale={locale} 
+                    dir={isRTL ? "rtl" : "ltr"}
+                    className={`min-h-screen ${isRTL ? "font-arabic" : ""}`}
+                >
+                    {children}
+                </div>
+            </AuthProvider>
         </LocaleProvider>
     );
 }
