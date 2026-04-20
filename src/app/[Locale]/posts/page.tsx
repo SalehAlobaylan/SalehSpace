@@ -1,7 +1,7 @@
 import PageWrapper from "@/components/ui/pageWrapper";
 import AuthButton from "@/components/admin/authButton";
 import PostControls from "@/components/admin/postControls";
-import { getPosts } from "@/lib/cms";
+import { getPosts } from "@/lib/content";
 import Link from "next/link";
 import { translations } from "@/lib/translations";
 

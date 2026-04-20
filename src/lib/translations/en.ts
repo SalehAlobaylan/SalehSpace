@@ -4,6 +4,7 @@ export interface Translation {
   nav: {
     overview: string;
     github: string;
+    products: string;
     blogs: string;
     posts: string;
   };
@@ -67,7 +68,6 @@ export interface Translation {
     go: string;
     nextjs: string;
     postgres: string;
-    supabase: string;
     aws: string;
     python: string;
     java: string;
@@ -101,6 +101,7 @@ export const en: Translation = {
   nav: {
     overview: "Overview",
     github: "GitHub",
+    products: "Products",
     blogs: "Blogs",
     posts: "Posts",
   },
@@ -184,7 +185,6 @@ export const en: Translation = {
       "I'm not a frontend engineer but if I'm fullstacking I'm using Next.js.",
     postgres:
       "used it for production, served with it more than 20k monthly active users.",
-    supabase: "My main cloud development database provider.",
     aws: "Deployed scalable apps using EC2, S3, IAM, and RDS for cloud infrastructure and used RDS for production.",
     python: "Used it for data Analysis with numpy, pandas, matplotlib.",
     java: "Started with it for fundamentals, OOP, Data structures.",

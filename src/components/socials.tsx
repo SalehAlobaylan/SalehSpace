@@ -4,7 +4,11 @@ import { useState } from "react";
 import { useLocale } from "@/lib/localeContext";
 import ContactModal from "@/components/contactModal";
 
-export default function Socials() {
+interface SocialsProps {
+  onGithubClick?: () => void;
+}
+
+export default function Socials({ onGithubClick }: SocialsProps) {
   const { t, isRTL } = useLocale();
   const [showContactModal, setShowContactModal] = useState(false);
   const [showCopiedNotification, setShowCopiedNotification] = useState(false);
@@ -22,10 +26,9 @@ export default function Socials() {
   return (
     <>
     <div className={`flex flex-wrap justify-center gap-2 md:gap-4 pt-2 pb-4 md:pb-6 ${isRTL ? "flex-row-reverse" : ""}`}>
-      <a
-        href="https://github.com/SalehAlobaylan"
-        target="_blank"
-        className="flex items-center gap-1.5 text-[10px] md:text-xs hover:text-[#FFB703] transition-colors group"
+      <button
+        onClick={onGithubClick}
+        className="flex items-center gap-1.5 text-[10px] md:text-xs hover:text-[#FFB703] transition-colors group cursor-pointer"
         aria-label="GitHub"
       >
         <svg
@@ -40,7 +43,7 @@ export default function Socials() {
           ></path>
         </svg>
         <span className="font-mono">{t.socials.github}</span>
-      </a>
+      </button>
       <a
         href="https://linkedin.com/in/salehalobaylan"
         target="_blank"

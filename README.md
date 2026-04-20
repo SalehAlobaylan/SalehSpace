@@ -29,6 +29,15 @@ npm run dev
 
 Then Open [http://localhost:3000](http://localhost:3000) with your browser
 
+## Database Setup
+
+This project now serves posts, blogs, and visitor stats from this repo using PostgreSQL-compatible SQL, which is ready for Neon.
+
+1. Create a `.env` file from `.env.example`
+2. Set `DATABASE_URL` to your Neon connection string
+3. Run the SQL in `db/schema.sql` against your database
+4. Start the app with `nvm use 22 && npm run dev`
+
 ## Social Media Post Management
 
 This project includes a CLI script to fetch content from Twitter/X and LinkedIn posts and manage them in `public/posts.json`.

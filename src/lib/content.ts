@@ -1,325 +1,359 @@
-import { supabase, createServerClient, isSupabaseConfigured } from "./supabase";
+import "server-only";
+
+import { DatabaseNotConfiguredError, getDbOrNull } from "./db";
 import type {
-  Blog,
-  Post,
-  Category,
-  InsertBlog,
-  InsertPost,
-} from "./database.types";
+  BlogInput,
+  ContentBlog,
+  ContentListParams,
+  ContentPost,
+  PostInput,
+  PostListParams,
+} from "./content-types";
 
-// ============================================
-// BLOGS
-// ============================================
+type PostRow = Omit<ContentPost, "media">;
+type BlogRow = ContentBlog;
 
-export async function getPublishedBlogs(limit?: number): Promise<Blog[]> {
-  if (!isSupabaseConfigured()) return [];
-
-  let query = supabase
-    .from("blogs")
-    .select("*")
-    .eq("published", true)
-    .order("published_at", { ascending: false });
-
-  if (limit) {
-    query = query.limit(limit);
+function clampLimit(limit: number | undefined, fallback = 20): number {
+  if (!limit) {
+    return fallback;
   }
 
-  const { data, error } = await query;
+  return Math.min(Math.max(limit, 1), 100);
+}
 
-  if (error) {
-    console.error("Error fetching blogs:", error);
+function normalizePage(page: number | undefined): number {
+  return Math.max(page || 1, 1);
+}
+
+function getSortColumn(sort: string | undefined): "created_at" | "updated_at" {
+  return sort === "updated_at" ? "updated_at" : "created_at";
+}
+
+function getSortDirection(order: string | undefined): "ASC" | "DESC" {
+  return order === "asc" ? "ASC" : "DESC";
+}
+
+function mapPost(row: PostRow): ContentPost {
+  return {
+    ...row,
+    media: [],
+  };
+}
+
+async function listPosts(params?: PostListParams): Promise<ContentPost[]> {
+  const db = getDbOrNull();
+
+  if (!db) {
     return [];
   }
 
-  return (data as Blog[]) || [];
+  const page = normalizePage(params?.page);
+  const limit = clampLimit(params?.limit);
+  const offset = (page - 1) * limit;
+  const sortColumn = getSortColumn(params?.sort);
+  const sortDirection = getSortDirection(params?.order);
+  const author = params?.author?.trim();
+  const search = params?.search?.trim();
+  const searchTerm = search ? `%${search}%` : null;
+
+  let rows: PostRow[];
+
+  if (author && searchTerm) {
+    rows = await db<PostRow[]>`
+      SELECT
+        id::text,
+        title,
+        content,
+        author,
+        created_at::text,
+        updated_at::text
+      FROM posts
+      WHERE author = ${author}
+        AND (title ILIKE ${searchTerm} OR content ILIKE ${searchTerm})
+      ORDER BY ${db.unsafe(sortColumn)} ${db.unsafe(sortDirection)}
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `;
+  } else if (author) {
+    rows = await db<PostRow[]>`
+      SELECT
+        id::text,
+        title,
+        content,
+        author,
+        created_at::text,
+        updated_at::text
+      FROM posts
+      WHERE author = ${author}
+      ORDER BY ${db.unsafe(sortColumn)} ${db.unsafe(sortDirection)}
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `;
+  } else if (searchTerm) {
+    rows = await db<PostRow[]>`
+      SELECT
+        id::text,
+        title,
+        content,
+        author,
+        created_at::text,
+        updated_at::text
+      FROM posts
+      WHERE title ILIKE ${searchTerm} OR content ILIKE ${searchTerm}
+      ORDER BY ${db.unsafe(sortColumn)} ${db.unsafe(sortDirection)}
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `;
+  } else {
+    rows = await db<PostRow[]>`
+      SELECT
+        id::text,
+        title,
+        content,
+        author,
+        created_at::text,
+        updated_at::text
+      FROM posts
+      ORDER BY ${db.unsafe(sortColumn)} ${db.unsafe(sortDirection)}
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `;
+  }
+
+  return rows.map(mapPost);
 }
 
-export async function getFeaturedBlogs(limit = 3): Promise<Blog[]> {
-  if (!isSupabaseConfigured()) return [];
+async function listBlogs(params?: ContentListParams): Promise<ContentBlog[]> {
+  const db = getDbOrNull();
 
-  const { data, error } = await supabase
-    .from("blogs")
-    .select("*")
-    .eq("published", true)
-    .eq("featured", true)
-    .order("published_at", { ascending: false })
-    .limit(limit);
-
-  if (error) {
-    console.error("Error fetching featured blogs:", error);
+  if (!db) {
     return [];
   }
 
-  return (data as Blog[]) || [];
+  const page = normalizePage(params?.page);
+  const limit = clampLimit(params?.limit);
+  const offset = (page - 1) * limit;
+  const sortColumn = getSortColumn(params?.sort);
+  const sortDirection = getSortDirection(params?.order);
+  const search = params?.search?.trim();
+  const searchTerm = search ? `%${search}%` : null;
+
+  if (searchTerm) {
+    return db<BlogRow[]>`
+      SELECT
+        id::text,
+        title,
+        content,
+        created_at::text,
+        updated_at::text
+      FROM blogs
+      WHERE title ILIKE ${searchTerm} OR content ILIKE ${searchTerm}
+      ORDER BY ${db.unsafe(sortColumn)} ${db.unsafe(sortDirection)}
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `;
+  }
+
+  return db<BlogRow[]>`
+    SELECT
+      id::text,
+      title,
+      content,
+      created_at::text,
+      updated_at::text
+    FROM blogs
+    ORDER BY ${db.unsafe(sortColumn)} ${db.unsafe(sortDirection)}
+    LIMIT ${limit}
+    OFFSET ${offset}
+  `;
 }
 
-export async function getBlogBySlug(slug: string): Promise<Blog | null> {
-  if (!isSupabaseConfigured()) return null;
+export async function getPosts(params?: PostListParams): Promise<ContentPost[]> {
+  return listPosts(params);
+}
 
-  const { data, error } = await supabase
-    .from("blogs")
-    .select("*")
-    .eq("slug", slug)
-    .eq("published", true)
-    .single();
+export async function getPostById(id: string): Promise<ContentPost | null> {
+  const db = getDbOrNull();
 
-  if (error) {
-    console.error("Error fetching blog:", error);
+  if (!db) {
     return null;
   }
 
-  return data as Blog;
+  const [row] = await db<PostRow[]>`
+    SELECT
+      id::text,
+      title,
+      content,
+      author,
+      created_at::text,
+      updated_at::text
+    FROM posts
+    WHERE id = ${id}
+    LIMIT 1
+  `;
+
+  return row ? mapPost(row) : null;
 }
 
-export async function incrementBlogViews(blogId: string): Promise<void> {
-  if (!isSupabaseConfigured()) return;
+export async function createPost(input: PostInput): Promise<ContentPost> {
+  const db = getDbOrNull();
 
-  const { data: blog } = await supabase
-    .from("blogs")
-    .select("views")
-    .eq("id", blogId)
-    .single();
-
-  if (blog) {
-    const currentViews = (blog as { views: number }).views || 0;
-    await supabase
-      .from("blogs")
-      .update({ views: currentViews + 1 } as never)
-      .eq("id", blogId);
-  }
-}
-
-// ============================================
-// POSTS
-// ============================================
-
-export async function getPublishedPosts(limit?: number): Promise<Post[]> {
-  if (!isSupabaseConfigured()) return [];
-
-  let query = supabase
-    .from("posts")
-    .select("*")
-    .eq("published", true)
-    .order("published_at", { ascending: false });
-
-  if (limit) {
-    query = query.limit(limit);
+  if (!db) {
+    throw new DatabaseNotConfiguredError();
   }
 
-  const { data, error } = await query;
+  const [row] = await db<PostRow[]>`
+    INSERT INTO posts (title, content, author)
+    VALUES (
+      ${input.title.trim()},
+      ${input.content.trim()},
+      ${input.author?.trim() || null}
+    )
+    RETURNING
+      id::text,
+      title,
+      content,
+      author,
+      created_at::text,
+      updated_at::text
+  `;
 
-  if (error) {
-    console.error("Error fetching posts:", error);
-    return [];
-  }
-
-  return (data as Post[]) || [];
-}
-
-export async function getFeaturedPosts(limit = 5): Promise<Post[]> {
-  if (!isSupabaseConfigured()) return [];
-
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*")
-    .eq("published", true)
-    .eq("featured", true)
-    .order("published_at", { ascending: false })
-    .limit(limit);
-
-  if (error) {
-    console.error("Error fetching featured posts:", error);
-    return [];
-  }
-
-  return (data as Post[]) || [];
-}
-
-export async function getPostBySlug(slug: string): Promise<Post | null> {
-  if (!isSupabaseConfigured()) return null;
-
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*")
-    .eq("slug", slug)
-    .eq("published", true)
-    .single();
-
-  if (error) {
-    console.error("Error fetching post:", error);
-    return null;
-  }
-
-  return data as Post;
-}
-
-export async function incrementPostViews(postId: string): Promise<void> {
-  if (!isSupabaseConfigured()) return;
-
-  const { data: post } = await supabase
-    .from("posts")
-    .select("views")
-    .eq("id", postId)
-    .single();
-
-  if (post) {
-    const currentViews = (post as { views: number }).views || 0;
-    await supabase
-      .from("posts")
-      .update({ views: currentViews + 1 } as never)
-      .eq("id", postId);
-  }
-}
-
-// ============================================
-// CATEGORIES
-// ============================================
-
-export async function getCategories(): Promise<Category[]> {
-  if (!isSupabaseConfigured()) return [];
-
-  const { data, error } = await supabase
-    .from("categories")
-    .select("*")
-    .order("name");
-
-  if (error) {
-    console.error("Error fetching categories:", error);
-    return [];
-  }
-
-  return (data as Category[]) || [];
-}
-
-// ============================================
-// SERVER-SIDE ADMIN FUNCTIONS
-// ============================================
-
-export async function createBlog(blog: InsertBlog): Promise<Blog | null> {
-  const supabaseServer = createServerClient();
-
-  const { data, error } = await supabaseServer
-    .from("blogs")
-    .insert(blog as never)
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Error creating blog:", error);
-    return null;
-  }
-
-  return data as Blog;
-}
-
-export async function updateBlog(
-  id: string,
-  updates: Partial<Blog>
-): Promise<Blog | null> {
-  const supabaseServer = createServerClient();
-
-  const { data, error } = await supabaseServer
-    .from("blogs")
-    .update(updates as never)
-    .eq("id", id)
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Error updating blog:", error);
-    return null;
-  }
-
-  return data as Blog;
-}
-
-export async function deleteBlog(id: string): Promise<boolean> {
-  const supabaseServer = createServerClient();
-
-  const { error } = await supabaseServer.from("blogs").delete().eq("id", id);
-
-  if (error) {
-    console.error("Error deleting blog:", error);
-    return false;
-  }
-
-  return true;
-}
-
-export async function createPost(post: InsertPost): Promise<Post | null> {
-  const supabaseServer = createServerClient();
-
-  const { data, error } = await supabaseServer
-    .from("posts")
-    .insert(post as never)
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Error creating post:", error);
-    return null;
-  }
-
-  return data as Post;
+  return mapPost(row);
 }
 
 export async function updatePost(
   id: string,
-  updates: Partial<Post>
-): Promise<Post | null> {
-  const supabaseServer = createServerClient();
+  input: PostInput
+): Promise<ContentPost | null> {
+  const db = getDbOrNull();
 
-  const { data, error } = await supabaseServer
-    .from("posts")
-    .update(updates as never)
-    .eq("id", id)
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Error updating post:", error);
-    return null;
+  if (!db) {
+    throw new DatabaseNotConfiguredError();
   }
 
-  return data as Post;
+  const [row] = await db<PostRow[]>`
+    UPDATE posts
+    SET
+      title = ${input.title.trim()},
+      content = ${input.content.trim()},
+      author = ${input.author?.trim() || null}
+    WHERE id = ${id}
+    RETURNING
+      id::text,
+      title,
+      content,
+      author,
+      created_at::text,
+      updated_at::text
+  `;
+
+  return row ? mapPost(row) : null;
 }
 
 export async function deletePost(id: string): Promise<boolean> {
-  const supabaseServer = createServerClient();
+  const db = getDbOrNull();
 
-  const { error } = await supabaseServer.from("posts").delete().eq("id", id);
-
-  if (error) {
-    console.error("Error deleting post:", error);
-    return false;
+  if (!db) {
+    throw new DatabaseNotConfiguredError();
   }
 
-  return true;
+  const rows = await db<{ id: string }[]>`
+    DELETE FROM posts
+    WHERE id = ${id}
+    RETURNING id::text
+  `;
+
+  return rows.length > 0;
 }
 
-// ============================================
-// CONTENT BY LOCALE
-// ============================================
+export async function getPages(
+  params?: ContentListParams
+): Promise<ContentBlog[]> {
+  return listBlogs(params);
+}
 
-export function getLocalizedContent<T extends Blog | Post>(
-  content: T,
-  locale: "en" | "ar"
-): T & {
-  localizedTitle: string;
-  localizedContent: string;
-  localizedExcerpt: string | null;
-} {
-  return {
-    ...content,
-    localizedTitle:
-      locale === "ar" && content.title_ar ? content.title_ar : content.title,
-    localizedContent:
-      locale === "ar" && content.content_ar
-        ? content.content_ar
-        : content.content,
-    localizedExcerpt:
-      locale === "ar" && content.excerpt_ar
-        ? content.excerpt_ar
-        : content.excerpt,
-  };
+export async function getPageById(id: string): Promise<ContentBlog | null> {
+  const db = getDbOrNull();
+
+  if (!db) {
+    return null;
+  }
+
+  const [row] = await db<BlogRow[]>`
+    SELECT
+      id::text,
+      title,
+      content,
+      created_at::text,
+      updated_at::text
+    FROM blogs
+    WHERE id = ${id}
+    LIMIT 1
+  `;
+
+  return row || null;
+}
+
+export async function createPage(input: BlogInput): Promise<ContentBlog> {
+  const db = getDbOrNull();
+
+  if (!db) {
+    throw new DatabaseNotConfiguredError();
+  }
+
+  const [row] = await db<BlogRow[]>`
+    INSERT INTO blogs (title, content)
+    VALUES (${input.title.trim()}, ${input.content.trim()})
+    RETURNING
+      id::text,
+      title,
+      content,
+      created_at::text,
+      updated_at::text
+  `;
+
+  return row;
+}
+
+export async function updatePage(
+  id: string,
+  input: BlogInput
+): Promise<ContentBlog | null> {
+  const db = getDbOrNull();
+
+  if (!db) {
+    throw new DatabaseNotConfiguredError();
+  }
+
+  const [row] = await db<BlogRow[]>`
+    UPDATE blogs
+    SET
+      title = ${input.title.trim()},
+      content = ${input.content.trim()}
+    WHERE id = ${id}
+    RETURNING
+      id::text,
+      title,
+      content,
+      created_at::text,
+      updated_at::text
+  `;
+
+  return row || null;
+}
+
+export async function deletePage(id: string): Promise<boolean> {
+  const db = getDbOrNull();
+
+  if (!db) {
+    throw new DatabaseNotConfiguredError();
+  }
+
+  const rows = await db<{ id: string }[]>`
+    DELETE FROM blogs
+    WHERE id = ${id}
+    RETURNING id::text
+  `;
+
+  return rows.length > 0;
 }

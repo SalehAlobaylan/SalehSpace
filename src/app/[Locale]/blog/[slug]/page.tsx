@@ -1,5 +1,5 @@
 import PageWrapper from "@/components/ui/pageWrapper";
-import { getPageById } from "@/lib/cms";
+import { getPageById } from "@/lib/content";
 import { notFound } from "next/navigation";
 import AuthButton from "@/components/admin/authButton";
 import PostControls from "@/components/admin/postControls";

@@ -1,16 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import PostsCarousel, { Post } from "@/components/postsCarousel";
 import TechStack from "@/components/techStack";
-import BlogList from "@/components/blogList";
-import SocialFeed from "@/components/socialFeed";
 import Socials from "@/components/socials";
 import LanguageSwitcher from "@/components/languageSwitcher";
 import { useLocale } from "@/lib/localeContext";
+import type { Post } from "@/components/postsCarousel";
 
 export default function HomeClient({ githubSection, posts }: { githubSection: React.ReactNode; posts: Post[] }) {
-  const [activeTab, setActiveTab] = useState<"overview" | "github" | "blogs" | "posts">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "products" | "github">("overview");
   const { t, isRTL } = useLocale();
 
   return (
@@ -42,9 +40,7 @@ export default function HomeClient({ githubSection, posts }: { githubSection: Re
             <nav className={`relative flex flex-wrap bg-[#013837]/30 rounded-lg p-1 gap-1 flex-1 md:flex-none ${isRTL ? "flex-row-reverse" : ""}`}>
               {[
                 { id: "overview", label: t.nav.overview },
-                { id: "github", label: t.nav.github },
-                // { id: "blogs", label: t.nav.blogs },
-                // { id: "posts", label: t.nav.posts },
+                { id: "products", label: t.nav.products },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -82,9 +78,31 @@ export default function HomeClient({ githubSection, posts }: { githubSection: Re
             </div>
 
             {/* Links (Condensed) */}
-            <Socials />
+            <Socials onGithubClick={() => setActiveTab("github")} />
 
             <TechStack />
+          </section>
+
+          {/* TAB: PRODUCTS */}
+          <section
+            className={`tab-content max-w-3xl mx-auto py-2 ${
+              activeTab === "products" ? "active" : ""
+            }`}
+          >
+            <div
+              className={`rounded-2xl border border-[#F6E5C6]/10 bg-[#013837]/20 p-6 md:p-8 ${
+                isRTL ? "text-right" : "text-left"
+              }`}
+            >
+              <h2 className="serif text-3xl font-bold text-[#F6E5C6] mb-3">
+                {t.nav.products}
+              </h2>
+              <p className="text-sm md:text-base text-[#F6E5C6]/75 leading-7">
+                {isRTL
+                  ? "هنا ستظهر المنتجات والأنظمة التي أبنيها. حالياً هذا القسم قيد التجهيز."
+                  : "This tab will showcase the products and systems I am building. It is currently being prepared."}
+              </p>
+            </div>
           </section>
 
           {/* TAB: GITHUB */}
@@ -94,42 +112,6 @@ export default function HomeClient({ githubSection, posts }: { githubSection: Re
             }`}
           >
             {githubSection}
-          </section>
-
-          {/* TAB: BLOGS */}
-          <section
-            className={`tab-content max-w-3xl mx-auto ${
-              activeTab === "blogs" ? "active" : ""
-            }`}
-          >
-            <div className={`flex justify-between items-end mb-8 border-b border-[#F6E5C6]/10 pb-4 ${isRTL ? "flex-row-reverse" : ""}`}>
-              <div className={isRTL ? "text-right" : ""}>
-                <h2 className="serif text-3xl font-bold">{t.blogs.title}</h2>
-                <p className="text-xs opacity-50 font-mono mt-1">
-                  {t.blogs.subtitle}
-                </p>
-              </div>
-            </div>
-
-            <BlogList />
-          </section>
-
-          {/* TAB: POSTS */}
-          <section
-            className={`tab-content h-full max-w-3xl mx-auto ${
-              activeTab === "posts" ? "active" : ""
-            }`}
-          >
-            <div className={`flex justify-between items-end mb-8 border-b border-[#F6E5C6]/10 pb-4 ${isRTL ? "flex-row-reverse" : ""}`}>
-              <div className={isRTL ? "text-right" : ""}>
-                <h2 className="serif text-3xl font-bold">{t.posts.title}</h2>
-                <p className="text-xs opacity-50 font-mono mt-1">
-                  {t.posts.subtitle}
-                </p>
-              </div>
-            </div>
-
-            <SocialFeed />
           </section>
         </div>
 

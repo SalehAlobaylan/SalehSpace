@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { getPages, createPage } from "@/lib/cms";
+import { createPage, getPages } from "@/lib/content";
+import { DatabaseNotConfiguredError, isDatabaseConfigured } from "@/lib/db";
+
+export const runtime = "nodejs";
 
 export async function GET(request: Request) {
   try {
@@ -28,6 +31,13 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    if (!isDatabaseConfigured()) {
+      return NextResponse.json(
+        { error: "DATABASE_URL is not configured yet" },
+        { status: 503 }
+      );
+    }
+
     const body = await request.json();
     const { title, content } = body;
 
@@ -41,6 +51,13 @@ export async function POST(request: Request) {
     const page = await createPage({ title, content });
     return NextResponse.json({ data: page });
   } catch (error) {
+    if (error instanceof DatabaseNotConfiguredError) {
+      return NextResponse.json(
+        { error: "DATABASE_URL is not configured yet" },
+        { status: 503 }
+      );
+    }
+
     console.error("Error creating page:", error);
     return NextResponse.json(
       { error: "Failed to create blog" },

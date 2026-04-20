@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { getPosts, createPost } from "@/lib/cms";
+import { DatabaseNotConfiguredError, isDatabaseConfigured } from "@/lib/db";
+import { createPost, getPosts } from "@/lib/content";
+
+export const runtime = "nodejs";
 
 export async function GET(request: Request) {
   try {
@@ -30,6 +33,13 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    if (!isDatabaseConfigured()) {
+      return NextResponse.json(
+        { error: "DATABASE_URL is not configured yet" },
+        { status: 503 }
+      );
+    }
+
     const body = await request.json();
     const { title, content, author } = body;
 
@@ -43,6 +53,13 @@ export async function POST(request: Request) {
     const post = await createPost({ title, content, author });
     return NextResponse.json({ data: post });
   } catch (error) {
+    if (error instanceof DatabaseNotConfiguredError) {
+      return NextResponse.json(
+        { error: "DATABASE_URL is not configured yet" },
+        { status: 503 }
+      );
+    }
+
     console.error("Error creating post:", error);
     return NextResponse.json(
       { error: "Failed to create post" },

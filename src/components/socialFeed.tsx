@@ -4,7 +4,7 @@ import { useLocale } from "@/lib/localeContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-interface CMSPost {
+interface FeedPost {
   id: string;
   title: string;
   content: string;
@@ -16,7 +16,7 @@ interface CMSPost {
 
 export default function SocialFeed() {
   const { locale } = useLocale();
-  const [posts, setPosts] = useState<CMSPost[]>([]);
+  const [posts, setPosts] = useState<FeedPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

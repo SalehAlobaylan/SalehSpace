@@ -4,7 +4,7 @@ import { useLocale } from "@/lib/localeContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-interface CMSPage {
+interface BlogPreview {
   id: string;
   title: string;
   content: string;
@@ -14,7 +14,7 @@ interface CMSPage {
 
 export default function BlogList() {
   const { locale } = useLocale();
-  const [blogs, setBlogs] = useState<CMSPage[]>([]);
+  const [blogs, setBlogs] = useState<BlogPreview[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

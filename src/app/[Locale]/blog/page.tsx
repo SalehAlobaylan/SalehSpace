@@ -1,7 +1,7 @@
 import PageWrapper from "@/components/ui/pageWrapper";
 import AuthButton from "@/components/admin/authButton";
 import PostControls from "@/components/admin/postControls";
-import { getPages } from "@/lib/cms";
+import { getPages } from "@/lib/content";
 import Link from "next/link";
 
 export const revalidate = 60; // ISR: revalidate every 60 seconds

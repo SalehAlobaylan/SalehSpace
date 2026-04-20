@@ -22,7 +22,6 @@ const mainStack: TechItem[] = [
   { i: "go", key: "go", alt: "Go" },
   { i: "nextjs", key: "nextjs", alt: "Next.js" },
   { i: "postgres", key: "postgres", alt: "PostgreSQL" },
-  { i: "supabase", key: "supabase", alt: "Supabase" },
   { i: "aws", key: "aws", alt: "AWS" },
 ];
 

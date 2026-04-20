@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { getPageById, updatePage, deletePage } from "@/lib/cms";
+import { deletePage, getPageById, updatePage } from "@/lib/content";
+import { DatabaseNotConfiguredError, isDatabaseConfigured } from "@/lib/db";
+
+export const runtime = "nodejs";
 
 export async function GET(
   request: Request,
@@ -28,6 +31,13 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!isDatabaseConfigured()) {
+      return NextResponse.json(
+        { error: "DATABASE_URL is not configured yet" },
+        { status: 503 }
+      );
+    }
+
     const { id } = await params;
     const body = await request.json();
     const { title, content } = body;
@@ -42,6 +52,13 @@ export async function PUT(
     const updatedPage = await updatePage(id, { title, content });
     return NextResponse.json({ data: updatedPage });
   } catch (error) {
+    if (error instanceof DatabaseNotConfiguredError) {
+      return NextResponse.json(
+        { error: "DATABASE_URL is not configured yet" },
+        { status: 503 }
+      );
+    }
+
     console.error("Error updating blog:", error);
     return NextResponse.json(
       { error: "Failed to update blog" },
@@ -55,10 +72,24 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!isDatabaseConfigured()) {
+      return NextResponse.json(
+        { error: "DATABASE_URL is not configured yet" },
+        { status: 503 }
+      );
+    }
+
     const { id } = await params;
     await deletePage(id);
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof DatabaseNotConfiguredError) {
+      return NextResponse.json(
+        { error: "DATABASE_URL is not configured yet" },
+        { status: 503 }
+      );
+    }
+
     console.error("Error deleting blog:", error);
     return NextResponse.json(
       { error: "Failed to delete blog" },

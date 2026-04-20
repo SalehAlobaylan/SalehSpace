@@ -1,7 +1,7 @@
 import PageWrapper from "@/components/ui/pageWrapper";
 import PostEditor from "@/components/admin/postEditor";
 import AuthButton from "@/components/admin/authButton";
-import { getPostById } from "@/lib/cms";
+import { getPostById } from "@/lib/content";
 import { notFound } from "next/navigation";
 
 interface EditPostPageProps {
