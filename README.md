@@ -87,3 +87,4 @@ npm run sync:posts
 - `--id <id>`: Custom ID for the post
 - `--update-existing`: Update all existing posts in posts.json
 - `--force`: Force update even if content is empty
+# foursa-platform
