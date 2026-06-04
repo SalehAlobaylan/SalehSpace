@@ -11,16 +11,9 @@ interface SocialsProps {
 export default function Socials({ onGithubClick }: SocialsProps) {
   const { t, isRTL } = useLocale();
   const [showContactModal, setShowContactModal] = useState(false);
-  const [showCopiedNotification, setShowCopiedNotification] = useState(false);
 
   const handleEmailClick = () => {
-    // Copy email to clipboard
-    navigator.clipboard.writeText("salehwleed1@gmail.com");
-    setShowCopiedNotification(true);
     setShowContactModal(true);
-    
-    // Hide the notification after 3 seconds
-    setTimeout(() => setShowCopiedNotification(false), 3000);
   };
   
   return (
@@ -97,10 +90,9 @@ export default function Socials({ onGithubClick }: SocialsProps) {
     </div>
 
     {/* Contact Modal */}
-    <ContactModal 
-      isOpen={showContactModal} 
+    <ContactModal
+      isOpen={showContactModal}
       onClose={() => setShowContactModal(false)}
-      showCopiedNotification={showCopiedNotification}
     />
     </>
   );

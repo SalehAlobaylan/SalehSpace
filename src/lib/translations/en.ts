@@ -30,6 +30,9 @@ export interface Translation {
     error: string;
     close: string;
     emailCopied: string;
+    emailIntro: string;
+    copy: string;
+    copied: string;
   };
   techStack: {
     stackedIn: string;
@@ -90,7 +93,10 @@ export interface Translation {
       featuresLabel: string;
       featuresTitle: string;
       featuresBody: string;
+      featuresTabs: string[];
       featureCards: { ttl: string; body: string; signals?: string[] }[];
+      flowLabel: string;
+      flowHint: string;
       pipelineLabel: string;
       pipelineTitle: string;
       pipelineBody: string;
@@ -121,14 +127,19 @@ export interface Translation {
       audienceLabel: string;
       audienceTitle: string;
       audienceCards: { ttl: string; body: string }[];
+      audienceTabs: string[];
+      audienceSubLabel: string;
+      audienceSubHint: string;
       walkthroughLabel: string;
       walkthroughTitle: string;
       walkthroughBody: string;
       walkthroughSteps: { step: string; sub: string }[];
+      walkthroughSubLabel: string;
+      walkthroughSubHint: string;
       aiLabel: string;
       aiTitle: string;
       aiBody: string;
-      aiCards: { ttl: string; body: string; badge?: string }[];
+      aiCards: { ttl: string; body: string; badge?: string; shortBadge?: string }[];
       contextLabel: string;
       contextTitle: string;
       contextCards: { ttl: string; body: string }[];
@@ -167,6 +178,24 @@ export interface Translation {
     jwt: string;
     microservices: string;
     shadcn: string;
+    react: string;
+    nodejs: string;
+    fastapi: string;
+    vercel: string;
+    cloudflare: string;
+    github: string;
+    githubactions: string;
+    figma: string;
+    drizzle: string;
+    digitalocean: string;
+    fastify: string;
+    tanstack: string;
+    huggingface: string;
+    tavily: string;
+    zustand: string;
+    cranl: string;
+    claudecode: string;
+    codex: string;
   };
 }
 
@@ -209,6 +238,9 @@ export const en: Translation = {
     error: "Failed to send message. Please try again.",
     close: "Close",
     emailCopied: "Email Copied!",
+    emailIntro: "Reach me directly — copy my email below.",
+    copy: "Copy",
+    copied: "Copied",
   },
 
   // Tech Stack
@@ -269,22 +301,22 @@ export const en: Translation = {
         { n: "7", l: "Ranking signals" },
         { n: "9", l: "Source types" },
       ],
-      portalsLabel: "Product surfaces",
+      portalsLabel: "Surfaces",
       portalsTitle: "User app and team dashboard",
       portalConsumerName: "Wahb user app",
-      portalConsumerSub: "User-facing app · Next.js",
+      portalConsumerSub: "For users · public-facing",
       portalConsumerBody:
         "The public product experience: social feeds, content interactions, user profiles, and state-driven flows built with Next.js and TypeScript for a fast, server-rendered user surface.",
       portalConsumerTags: ["Next.js", "TypeScript", "Social Feeds", "Client APIs"],
-      portalAdminName: "Wahb admin dashboard",
-      portalAdminSub: "Team operations dashboard · Next.js 15 · React 19",
+      portalAdminName: "Admin dashboard",
+      portalAdminSub: "For the Wahb team · internal",
       portalAdminBody:
         "The dashboard Wahb's team uses to manage the app: content moderation, source management, ranking intelligence tuning, enrichment monitoring, and analytics inside a typed React 19 application with TanStack Table, Recharts, and role-aware views.",
       portalAdminTags: ["React", "TypeScript", "Admin Dashboard", "RBAC"],
-      backendLabel: "Backend services",
-      backendTitle: "Four backend services with focused ownership",
+      backendLabel: "Architecture",
+      backendTitle: "Four services, one ingestion pipeline",
       backendBody:
-        "Each service owns a narrow slice of the system so the platform can grow without turning every change into a cross-cutting rewrite.",
+        "Each service owns a narrow slice. Together they form a queue-driven pipeline with circuit breakers between stages.",
       services: [
         {
           lang: "Go · Gin",
@@ -308,9 +340,10 @@ export const en: Translation = {
         },
       ],
       featuresLabel: "Product surface",
-      featuresTitle: "A dual-mode discovery experience",
+      featuresTitle: "Dual-mode discovery + ranking engine",
       featuresBody:
-        "Wahb is built around two complementary feeds and a real-time ranking engine. Together they replace decision fatigue with curated, contextual content that respects the way people actually browse.",
+        "Two feeds and a real-time engine replace decision fatigue with curated, contextual content.",
+      featuresTabs: ["For You", "News", "Ranking"],
       featureCards: [
         {
           ttl: "For You feed",
@@ -328,6 +361,8 @@ export const en: Translation = {
           signals: ["Freshness", "Engagement", "Velocity", "Similarity", "Quality", "Diversity", "Trending"],
         },
       ],
+      flowLabel: "→ Flow · From raw source to ranked feed",
+      flowHint: "Aggregate → enrich → CMS → platform",
       pipelineLabel: "Ingestion pipeline",
       pipelineTitle: "From raw source to ranked feed",
       pipelineBody:
@@ -359,19 +394,19 @@ export const en: Translation = {
         "A focused legal workspace for Saudi law firms, combining AI-assisted regulation discovery, document intelligence, and case operations in one coherent product.",
       chips: ["Legal Tech", "AI-Powered", "Saudi Law", "Case Management", "Document Intelligence"],
       platformLabel: "The platform",
-      platformTitle: "Research, documents, and cases in one workflow",
+      platformTitle: "One workspace, made for the people who run a matter",
       platformBody:
-        "Silah Legal brings the daily work of a law office into one place: case files, legal research, document review, deadlines, and team coordination shaped around the Saudi legal context.",
+        "Research, documents, and cases share one workflow — shaped around Saudi legal context, used by three kinds of teams.",
       stats: [
         { n: "1", l: "Unified platform" },
         { n: "3", l: "Core pillars" },
         { n: "AI", l: "Regulation engine" },
         { n: "KSA", l: "Saudi law focus" },
       ],
-      challengeLabel: "The challenge",
-      challengeTitle: "Legal teams lose time before the real work begins",
+      challengeLabel: "Problem → process",
+      challengeTitle: "The drag, and the workflow that removes it",
       challengeBody:
-        "Before a lawyer can argue, draft, or advise, they often have to search regulations, compare documents, reconstruct timelines, and pull context from scattered sources. Silah reduces that operational drag.",
+        "Three reasons legal work stalls — and how a matter actually moves inside Silah, end to end.",
       challengeCards: [
         {
           ttl: "Scattered documents",
@@ -416,6 +451,9 @@ export const en: Translation = {
       ],
       audienceLabel: "Who it's for",
       audienceTitle: "Built for the people who handle the matter",
+      audienceTabs: ["Law firms", "In-house legal", "Consultants"],
+      audienceSubLabel: "Who it's for",
+      audienceSubHint: "Switch between the three audiences",
       audienceCards: [
         {
           ttl: "Law firms",
@@ -434,6 +472,8 @@ export const en: Translation = {
       walkthroughTitle: "What a matter looks like inside Silah",
       walkthroughBody:
         "Silah is shaped around the way a case actually moves through a legal team — from the moment it lands on someone's desk to the day it closes.",
+      walkthroughSubLabel: "→ A matter inside Silah, end to end",
+      walkthroughSubHint: "From desk to close",
       walkthroughSteps: [
         { step: "Open the case", sub: "Pick the case type, parties, jurisdiction, and assign the team" },
         { step: "Bring the documents", sub: "Upload contracts, filings, and notes — text and OCR run automatically" },
@@ -450,21 +490,25 @@ export const en: Translation = {
           ttl: "Transparent scoring",
           body: "Each suggested regulation carries a composite score with its parts visible: semantic match, supporting coverage, lexical overlap, and case-type fit. No mystery number — the reasoning is on the page.",
           badge: "Auditable",
+          shortBadge: "Auditable",
         },
         {
-          ttl: "Citable evidence",
+          ttl: "Evidence trail",
           body: "Every link exposes the exact regulation passages that matched and the case snippets that triggered them, so reasoning can be reviewed, shared with a partner, or referenced in client work.",
           badge: "Citable evidence",
+          shortBadge: "Citable",
         },
         {
           ttl: "Document intelligence",
           body: "Uploaded files are read with native text extraction first, OCR fallback for scanned Arabic and English material, then summarized and highlighted in the context of the case.",
           badge: "Arabic + English",
+          shortBadge: "AR+EN",
         },
         {
           ttl: "Regulations stay current",
           body: "A monitoring worker tracks the Ministry of Justice laws site and creates a new version on amendment, so subscribed users get a diff and a notification — no manual checking.",
           badge: "MOJ-synced",
+          shortBadge: "MOJ",
         },
       ],
       contextLabel: "Built for the Saudi context",
@@ -531,5 +575,23 @@ export const en: Translation = {
     microservices:
       "usually when i build a system i start with designing it as microservices, then gathering it to smaller approaches as needed and projects limits, but my mind always *Microservicing*.",
     shadcn: "I don't like to frontend so usually i start with this :).",
+    react: "My default library when a project needs a real UI.",
+    nodejs: "Runtime behind much of my backend services and tooling.",
+    fastapi: "My go-to Python framework for ML-backed APIs.",
+    vercel: "Where I ship most of my Next.js apps.",
+    cloudflare: "DNS, CDN, and edge protection for my deployments.",
+    github: "Where all my code lives and ships from.",
+    githubactions: "CI/CD pipelines for automated testing and deployment.",
+    figma: "Quick UI mockups and design handoff.",
+    drizzle: "Type-safe SQL ORM I reach for in TypeScript projects.",
+    digitalocean: "Droplets and managed databases for production hosting.",
+    fastify: "Lightweight Node framework for high-throughput services.",
+    tanstack: "TanStack Query and Table for data fetching and rich tables.",
+    huggingface: "Where I host and deploy my models.",
+    tavily: "Search API for retrieval in AI workflows.",
+    zustand: "Minimal, hook-based state management for React.",
+    cranl: "Cloud deployment platform — deploy and manage apps in seconds.",
+    claudecode: "My main agentic coding tool — runs in the terminal, writes, edits, and ships code end-to-end.",
+    codex: "OpenAI's cloud coding agent — used it alongside Claude Code for AI-assisted development.",
   },
 };

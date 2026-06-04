@@ -436,6 +436,129 @@ function MobileMockup({ draw, w, h }: { draw: DrawFn; w: number; h: number }) {
   return <canvas ref={ref} className="ps-mobile-mockup" style={{ width: w, height: h }} />;
 }
 
+/* ── Collapsible card: title only by default, click to reveal body ── */
+function CollapsibleCard({ ttl, body, badge, signals }: { ttl: string; body: string; badge?: string; signals?: string[] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`ps-card ${open ? "ps-open" : ""}`} onClick={() => setOpen(o => !o)}>
+      <div className="ps-card-head">
+        <div className="ps-card-ttl">{ttl}</div>
+        <div className="ps-card-plus" aria-hidden />
+      </div>
+      <div className="ps-card-detail">
+        <div>
+          {badge && <div className="ps-card-badge">{badge}</div>}
+          <div className="ps-card-body">{body}</div>
+          {signals && signals.length > 0 && (
+            <div className="ps-signals">{signals.map((s, j) => <span key={j} className="ps-tag">{s}</span>)}</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Collapsible service row: lang + name, click to reveal description ── */
+function CollapsibleSvc({ lang, name, desc }: { lang: string; name: string; desc: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`ps-svc ${open ? "ps-open" : ""}`} onClick={() => setOpen(o => !o)}>
+      <div className="ps-svc-head">
+        <div className="ps-svc-lang">{lang}</div>
+        <div className="ps-svc-name">{name}</div>
+        <div className="ps-card-plus" aria-hidden />
+      </div>
+      <div className="ps-svc-detail">
+        <div><div className="ps-svc-desc">{desc}</div></div>
+      </div>
+    </div>
+  );
+}
+
+/* ── In-hero stack group: label + arrow, click to reveal chips ── */
+function StackGroupInline({ label, items }: { label: string; items: string[] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`ps-stack-group-inline ${open ? "ps-open" : ""}`} onClick={() => setOpen(o => !o)}>
+      <span className="ps-stack-group-inline-label">{label}</span>
+      {items.map((it, i) => <span key={i} className="ps-chip-sm">{it}</span>)}
+      <span className="ps-stack-count" aria-hidden />
+    </div>
+  );
+}
+
+/* ── Tabs: one panel at a time ── */
+function Tabs({ tabs }: { tabs: { label: string; ttl: string; body: string; signals?: string[] }[] }) {
+  const [active, setActive] = useState(0);
+  return (
+    <div className="ps-tab-set">
+      <div className="ps-tab-strip">
+        {tabs.map((tb, i) => (
+          <button
+            key={i}
+            className={`ps-tab-btn ${active === i ? "ps-active" : ""}`}
+            data-n={String(i + 1).padStart(2, "0")}
+            onClick={() => setActive(i)}
+          >
+            {tb.label}
+          </button>
+        ))}
+      </div>
+      {tabs.map((tb, i) => (
+        <div key={i} className={`ps-tab-panel ${active === i ? "ps-active" : ""}`}>
+          <div className="ps-tab-panel-ttl">{tb.ttl}</div>
+          <div className="ps-tab-panel-body">{tb.body}</div>
+          {tb.signals && tb.signals.length > 0 && (
+            <div className="ps-signals">{tb.signals.map((s, j) => <span key={j} className="ps-tag">{s}</span>)}</div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ── Numbered problem row: reveal on hover, click to pin (touch) ── */
+function ProbItem({ n, ttl, body }: { n: number; ttl: string; body: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`ps-prob ${open ? "ps-open" : ""}`} onClick={() => setOpen(o => !o)}>
+      <div className="ps-prob-n">{String(n).padStart(2, "0")}</div>
+      <div className="ps-prob-body">
+        <div className="ps-prob-t">{ttl}</div>
+        <div className="ps-prob-desc">{body}</div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Featured showcase: one big card + selector list ── */
+function Showcase({ cards }: { cards: { ttl: string; body: string; badge?: string; shortBadge?: string }[] }) {
+  const [active, setActive] = useState(0);
+  const f = cards[active];
+  return (
+    <div className="ps-showcase">
+      <div className="ps-showcase-featured" key={active}>
+        {f.badge && <div className="ps-showcase-featured-badge">{f.badge}</div>}
+        <div className="ps-showcase-featured-t">{f.ttl}</div>
+        <div className="ps-showcase-featured-body">{f.body}</div>
+      </div>
+      <div className="ps-showcase-list">
+        {cards.map((c, i) => (
+          <div
+            key={i}
+            className={`ps-showcase-item ${active === i ? "ps-active" : ""}`}
+            onClick={() => setActive(i)}
+          >
+            <span className="ps-showcase-item-dot" aria-hidden />
+            <span className="ps-showcase-item-t">{c.ttl}</span>
+            {c.shortBadge && <span className="ps-showcase-item-badge">{c.shortBadge}</span>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ProductsShowcase({ scrollContainerId = "main-scroll" }: { scrollContainerId?: string }) {
   const { t, isRTL } = useLocale();
   const ps = t.productsShowcase;
@@ -716,12 +839,14 @@ export default function ProductsShowcase({ scrollContainerId = "main-scroll" }: 
             <div className="ps-hero-eye">{ps.wahb.heroEye}</div>
             <h1 className="ps-hero-title">{ps.wahb.titleLine1}{ps.wahb.titleLine2 ? <><br />{ps.wahb.titleLine2}</> : null}</h1>
             <p className="ps-hero-sub">{ps.wahb.heroSub}</p>
-            <div className="ps-hero-chips">
-              {ps.wahb.chips.map((c, i) => <span key={i} className="ps-chip">{c}</span>)}
+            <div className="ps-hero-row">
+              <a className="ps-hero-link" href={ps.wahb.footLink} target="_blank" rel="noopener noreferrer">
+                Visit ↗
+              </a>
+              {ps.wahb.stackGroups.map((g, i) => (
+                <StackGroupInline key={i} label={g.label} items={g.items} />
+              ))}
             </div>
-            <a className="ps-hero-link" href={ps.wahb.footLink} target="_blank" rel="noopener noreferrer">
-              Visit ↗
-            </a>
             {!isMobile && (
               <div className="ps-scroll-hint">
                 <span>{ps.scrollHint}</span>
@@ -732,114 +857,105 @@ export default function ProductsShowcase({ scrollContainerId = "main-scroll" }: 
 
           <div className="ps-csect-gap" />
 
-          <div className="ps-csect">
-            <div className="ps-sect-label ps-reveal">{ps.wahb.atGlanceLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.wahb.atGlanceTitle}</h2>
-            <p className="ps-sect-body ps-reveal">{ps.wahb.atGlanceBody}</p>
-            <div className="ps-section-shot ps-reveal">
-              <img src={WAHB_ARCHITECTURE_SCREEN.src} alt={WAHB_ARCHITECTURE_SCREEN.alt} loading="lazy" />
+          {/* AT A GLANCE */}
+          <section className="ps-csect">
+            <div className="ps-csect-head ps-reveal">
+              <div className="ps-sect-label">{ps.wahb.atGlanceLabel}</div>
+              <h2 className="ps-sect-title">{ps.wahb.atGlanceTitle}</h2>
+              <p className="ps-sect-body">{ps.wahb.atGlanceBody}</p>
             </div>
-            <div className="ps-stat-row ps-rs">
-              {ps.wahb.stats.map((s, i) => (
-                <div key={i} className="ps-stat"><div className="ps-stat-n">{s.n}</div><div className="ps-stat-l">{s.l}</div></div>
-              ))}
+            <div className="ps-csect-body ps-reveal">
+              <div className="ps-stat-strip">
+                {ps.wahb.stats.map((s, i) => (
+                  <div key={i} className="ps-stat"><div className="ps-stat-n">{s.n}</div><div className="ps-stat-l">{s.l}</div></div>
+                ))}
+              </div>
+              <div className="ps-inline-shot">
+                <img src={WAHB_ARCHITECTURE_SCREEN.src} alt={WAHB_ARCHITECTURE_SCREEN.alt} loading="lazy" />
+              </div>
             </div>
-          </div>
+          </section>
 
-          <div className="ps-csect ps-csect-alt">
-            <div className="ps-sect-label ps-reveal">{ps.wahb.portalsLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.wahb.portalsTitle}</h2>
-            <div className="ps-twocol ps-rs">
-              <div className="ps-pcrd">
+          {/* SURFACES */}
+          <section className="ps-csect ps-csect-alt">
+            <div className="ps-csect-head ps-reveal">
+              <div className="ps-sect-label">{ps.wahb.portalsLabel}</div>
+              <h2 className="ps-sect-title">{ps.wahb.portalsTitle}</h2>
+            </div>
+            <div className="ps-csect-body ps-grid ps-grid-2 ps-rs">
+              <div className="ps-pcrd ps-pcrd-feature">
+                <div className="ps-pcrd-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                    <rect x="5" y="2" width="14" height="20" rx="2.5" />
+                    <line x1="12" y1="18" x2="12.01" y2="18" />
+                  </svg>
+                </div>
                 <div className="ps-pcrd-name">{ps.wahb.portalConsumerName}</div>
                 <div className="ps-pcrd-sub">{ps.wahb.portalConsumerSub}</div>
                 <div className="ps-pcrd-body">{ps.wahb.portalConsumerBody}</div>
-                <div className="ps-tags">
-                  {ps.wahb.portalConsumerTags.map((tg, i) => <span key={i} className="ps-tag">{tg}</span>)}
-                </div>
               </div>
-              <div className="ps-pcrd">
+              <div className="ps-pcrd ps-pcrd-feature">
+                <div className="ps-pcrd-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                    <rect x="3" y="4" width="18" height="14" rx="2" />
+                    <line x1="3" y1="9" x2="21" y2="9" />
+                    <line x1="9" y1="9" x2="9" y2="18" />
+                  </svg>
+                </div>
                 <div className="ps-pcrd-name">{ps.wahb.portalAdminName}</div>
                 <div className="ps-pcrd-sub">{ps.wahb.portalAdminSub}</div>
                 <div className="ps-pcrd-body">{ps.wahb.portalAdminBody}</div>
-                <div className="ps-tags">
-                  {ps.wahb.portalAdminTags.map((tg, i) => <span key={i} className="ps-tag">{tg}</span>)}
-                </div>
               </div>
             </div>
-            <div className="ps-section-shot ps-section-shot-phone ps-reveal">
-              <img src={WAHB_FLOATING_SCREENS[2].src} alt={WAHB_FLOATING_SCREENS[2].alt} loading="lazy" />
-            </div>
-          </div>
+          </section>
 
-          <div className="ps-csect">
-            <div className="ps-sect-label ps-reveal">{ps.wahb.backendLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.wahb.backendTitle}</h2>
-            <p className="ps-sect-body ps-reveal">{ps.wahb.backendBody}</p>
-            <div className="ps-section-shot ps-reveal">
-              <img src={WAHB_FLOATING_SCREENS[0].src} alt={WAHB_FLOATING_SCREENS[0].alt} loading="lazy" />
+          {/* ARCHITECTURE — services + ingestion flow (merged) */}
+          <section className="ps-csect">
+            <div className="ps-csect-head ps-reveal">
+              <div className="ps-sect-label">{ps.wahb.backendLabel}</div>
+              <h2 className="ps-sect-title">{ps.wahb.backendTitle}</h2>
+              <p className="ps-sect-body">{ps.wahb.backendBody}</p>
             </div>
-            <div className="ps-svc-list ps-rs">
-              {ps.wahb.services.map((s, i) => (
-                <div key={i} className="ps-svc">
-                  <div><div className="ps-svc-lang">{s.lang}</div></div>
-                  <div><div className="ps-svc-name">{s.name}</div><div className="ps-svc-desc">{s.desc}</div></div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="ps-csect ps-csect-alt">
-            <div className="ps-sect-label ps-reveal">{ps.wahb.featuresLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.wahb.featuresTitle}</h2>
-            <p className="ps-sect-body ps-reveal">{ps.wahb.featuresBody}</p>
-            <div className="ps-cards ps-rs">
-              {ps.wahb.featureCards.map((c, i) => (
-                <div key={i} className="ps-card ps-feature-card">
-                  <div className="ps-card-ttl">{c.ttl}</div>
-                  <div className="ps-card-body">{c.body}</div>
-                  {c.signals && c.signals.length > 0 && (
-                    <div className="ps-tags ps-feature-signals">
-                      {c.signals.map((s, j) => <span key={j} className="ps-tag">{s}</span>)}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="ps-csect">
-            <div className="ps-sect-label ps-reveal">{ps.wahb.pipelineLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.wahb.pipelineTitle}</h2>
-            <p className="ps-sect-body ps-reveal">{ps.wahb.pipelineBody}</p>
-            <div className="ps-flow ps-rs">
-              {ps.wahb.pipelineSteps.map((s, i) => (
-                <div key={i} className="ps-flow-item">
-                  <div className="ps-flow-step">
-                    <div className="ps-flow-step-n">{String(i + 1).padStart(2, "0")}</div>
-                    <div className="ps-flow-step-name">{s.step}</div>
-                    <div className="ps-flow-step-sub">{s.sub}</div>
+            <div className="ps-csect-body ps-reveal">
+              <div className="ps-svc-list">
+                {ps.wahb.services.map((s, i) => (
+                  <CollapsibleSvc key={i} lang={s.lang} name={s.name} desc={s.desc} />
+                ))}
+              </div>
+              <div className="ps-subsect-head">
+                <span className="ps-subsect-label">{ps.wahb.flowLabel}</span>
+                <span className="ps-subsect-hint">{ps.wahb.flowHint}</span>
+              </div>
+              <div className="ps-flow-rail">
+                {ps.wahb.pipelineSteps.map((s, i) => (
+                  <div key={i} className="ps-flow-card">
+                    <div className="ps-flow-n">{String(i + 1).padStart(2, "0")}</div>
+                    <div className="ps-flow-name">{s.step}</div>
+                    <div className="ps-flow-sub">{s.sub}</div>
                   </div>
-                  {i < ps.wahb.pipelineSteps.length - 1 && <div className="ps-flow-arrow" aria-hidden>→</div>}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          </section>
 
-          <div className="ps-csect ps-csect-alt">
-            <div className="ps-sect-label ps-reveal">{ps.wahb.stackLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.wahb.stackTitle}</h2>
-            <div className="ps-stack-grid ps-rs">
-              {ps.wahb.stackGroups.map((g, i) => (
-                <div key={i} className="ps-stack-group">
-                  <div className="ps-stack-group-label">{g.label}</div>
-                  <div className="ps-stack-group-items">
-                    {g.items.map((it, j) => <span key={j} className="ps-chip">{it}</span>)}
-                  </div>
-                </div>
-              ))}
+          {/* PRODUCT SURFACE — tabs */}
+          <section className="ps-csect ps-csect-alt">
+            <div className="ps-csect-head ps-reveal">
+              <div className="ps-sect-label">{ps.wahb.featuresLabel}</div>
+              <h2 className="ps-sect-title">{ps.wahb.featuresTitle}</h2>
+              <p className="ps-sect-body">{ps.wahb.featuresBody}</p>
             </div>
-          </div>
+            <div className="ps-csect-body ps-reveal">
+              <Tabs
+                tabs={ps.wahb.featureCards.map((c, i) => ({
+                  label: ps.wahb.featuresTabs[i] ?? c.ttl,
+                  ttl: c.ttl,
+                  body: c.body,
+                  signals: c.signals,
+                }))}
+              />
+            </div>
+          </section>
 
           <div className="ps-prod-foot ps-reveal">
             <span className="ps-foot-wm">{ps.wahb.footWm}</span>
@@ -885,112 +1001,86 @@ export default function ProductsShowcase({ scrollContainerId = "main-scroll" }: 
 
           <div className="ps-csect-gap" />
 
-          <div className="ps-csect">
-            <div className="ps-sect-label ps-reveal">{ps.silah.platformLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.silah.platformTitle}</h2>
-            <p className="ps-sect-body ps-reveal">{ps.silah.platformBody}</p>
-            <div className="ps-section-shot ps-reveal">
-              <img src={SILAH_FLOATING_SCREENS[1].src} alt={SILAH_FLOATING_SCREENS[1].alt} loading="lazy" />
+          {/* PLATFORM + AUDIENCE (merged) */}
+          <section className="ps-csect">
+            <div className="ps-csect-head ps-reveal">
+              <div className="ps-sect-label">{ps.silah.platformLabel}</div>
+              <h2 className="ps-sect-title">{ps.silah.platformTitle}</h2>
+              <p className="ps-sect-body">{ps.silah.platformBody}</p>
             </div>
-            <div className="ps-stat-row ps-rs">
-              {ps.silah.stats.map((s, i) => (
-                <div key={i} className="ps-stat"><div className="ps-stat-n">{s.n}</div><div className="ps-stat-l">{s.l}</div></div>
-              ))}
+            <div className="ps-csect-body ps-reveal">
+              <div className="ps-stat-strip">
+                {ps.silah.stats.map((s, i) => (
+                  <div key={i} className="ps-stat"><div className="ps-stat-n">{s.n}</div><div className="ps-stat-l">{s.l}</div></div>
+                ))}
+              </div>
+              <div className="ps-subsect-head">
+                <span className="ps-subsect-label">{ps.silah.audienceSubLabel}</span>
+                <span className="ps-subsect-hint">{ps.silah.audienceSubHint}</span>
+              </div>
+              <Tabs
+                tabs={ps.silah.audienceCards.map((c, i) => ({
+                  label: ps.silah.audienceTabs[i] ?? c.ttl,
+                  ttl: c.ttl,
+                  body: c.body,
+                }))}
+              />
             </div>
-          </div>
+          </section>
 
-          <div className="ps-csect ps-csect-alt">
-            <div className="ps-sect-label ps-reveal">{ps.silah.audienceLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.silah.audienceTitle}</h2>
-            <div className="ps-cards ps-rs">
-              {ps.silah.audienceCards.map((c, i) => (
-                <div key={i} className="ps-card">
-                  <div className="ps-card-ttl">{c.ttl}</div>
-                  <div className="ps-card-body">{c.body}</div>
-                </div>
-              ))}
+          {/* CHALLENGE + WALKTHROUGH (merged: problem → process) */}
+          <section className="ps-csect ps-csect-alt">
+            <div className="ps-csect-head ps-reveal">
+              <div className="ps-sect-label">{ps.silah.challengeLabel}</div>
+              <h2 className="ps-sect-title">{ps.silah.challengeTitle}</h2>
+              <p className="ps-sect-body">{ps.silah.challengeBody}</p>
             </div>
-          </div>
-
-          <div className="ps-csect">
-            <div className="ps-sect-label ps-reveal">{ps.silah.challengeLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.silah.challengeTitle}</h2>
-            <p className="ps-sect-body ps-reveal">{ps.silah.challengeBody}</p>
-            <div className="ps-cards ps-rs">
-              {ps.silah.challengeCards.map((c, i) => (
-                <div key={i} className="ps-card">
-                  <div className="ps-card-ttl">{c.ttl}</div>
-                  <div className="ps-card-body">{c.body}</div>
-                </div>
-              ))}
-            </div>
-            <div className="ps-section-shot ps-reveal">
-              <img src={SILAH_FLOATING_SCREENS[0].src} alt={SILAH_FLOATING_SCREENS[0].alt} loading="lazy" />
-            </div>
-          </div>
-
-          <div className="ps-csect ps-csect-alt">
-            <div className="ps-sect-label ps-reveal">{ps.silah.walkthroughLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.silah.walkthroughTitle}</h2>
-            <p className="ps-sect-body ps-reveal">{ps.silah.walkthroughBody}</p>
-            <div className="ps-flow ps-rs">
-              {ps.silah.walkthroughSteps.map((s, i) => (
-                <div key={i} className="ps-flow-item">
-                  <div className="ps-flow-step">
-                    <div className="ps-flow-step-n">{String(i + 1).padStart(2, "0")}</div>
-                    <div className="ps-flow-step-name">{s.step}</div>
-                    <div className="ps-flow-step-sub">{s.sub}</div>
+            <div className="ps-csect-body ps-reveal">
+              <div className="ps-problist">
+                {ps.silah.challengeCards.map((c, i) => (
+                  <ProbItem key={i} n={i + 1} ttl={c.ttl} body={c.body} />
+                ))}
+              </div>
+              <div className="ps-subsect-head">
+                <span className="ps-subsect-label">{ps.silah.walkthroughSubLabel}</span>
+                <span className="ps-subsect-hint">{ps.silah.walkthroughSubHint}</span>
+              </div>
+              <div className="ps-timeline">
+                {ps.silah.walkthroughSteps.map((s, i) => (
+                  <div key={i} className="ps-tl-step">
+                    <div className="ps-tl-n">{String(i + 1).padStart(2, "0")}</div>
+                    <div className="ps-tl-t">{s.step}</div>
+                    <div className="ps-tl-d">{s.sub}</div>
                   </div>
-                  {i < ps.silah.walkthroughSteps.length - 1 && <div className="ps-flow-arrow" aria-hidden>→</div>}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          </section>
 
-          <div className="ps-csect">
-            <div className="ps-sect-label ps-reveal">{ps.silah.capabilitiesLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.silah.capabilitiesTitle}</h2>
-            <div className="ps-cards ps-rs">
+          {/* CAPABILITIES — collapsible cards */}
+          <section className="ps-csect">
+            <div className="ps-csect-head ps-reveal">
+              <div className="ps-sect-label">{ps.silah.capabilitiesLabel}</div>
+              <h2 className="ps-sect-title">{ps.silah.capabilitiesTitle}</h2>
+            </div>
+            <div className="ps-csect-body ps-grid ps-grid-3 ps-rs">
               {ps.silah.capabilitiesCards.map((c, i) => (
-                <div key={i} className="ps-card">
-                  <div className="ps-card-ttl">{c.ttl}</div>
-                  <div className="ps-card-body">{c.body}</div>
-                </div>
+                <CollapsibleCard key={i} ttl={c.ttl} body={c.body} />
               ))}
             </div>
-            <div className="ps-section-shot ps-reveal">
-              <img src={SILAH_FLOATING_SCREENS[2].src} alt={SILAH_FLOATING_SCREENS[2].alt} loading="lazy" />
-            </div>
-          </div>
+          </section>
 
-          <div className="ps-csect ps-csect-alt">
-            <div className="ps-sect-label ps-reveal">{ps.silah.aiLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.silah.aiTitle}</h2>
-            <p className="ps-sect-body ps-reveal">{ps.silah.aiBody}</p>
-            <div className="ps-cards ps-rs">
-              {ps.silah.aiCards.map((c, i) => (
-                <div key={i} className="ps-card ps-feature-card">
-                  {c.badge && <div className="ps-card-badge">{c.badge}</div>}
-                  <div className="ps-card-ttl">{c.ttl}</div>
-                  <div className="ps-card-body">{c.body}</div>
-                </div>
-              ))}
+          {/* AI — featured showcase */}
+          <section className="ps-csect ps-csect-alt">
+            <div className="ps-csect-head ps-reveal">
+              <div className="ps-sect-label">{ps.silah.aiLabel}</div>
+              <h2 className="ps-sect-title">{ps.silah.aiTitle}</h2>
+              <p className="ps-sect-body">{ps.silah.aiBody}</p>
             </div>
-          </div>
-
-          <div className="ps-csect">
-            <div className="ps-sect-label ps-reveal">{ps.silah.contextLabel}</div>
-            <h2 className="ps-sect-title ps-reveal">{ps.silah.contextTitle}</h2>
-            <div className="ps-cards ps-rs">
-              {ps.silah.contextCards.map((c, i) => (
-                <div key={i} className="ps-card">
-                  <div className="ps-card-ttl">{c.ttl}</div>
-                  <div className="ps-card-body">{c.body}</div>
-                </div>
-              ))}
+            <div className="ps-csect-body ps-reveal">
+              <Showcase cards={ps.silah.aiCards} />
             </div>
-            <div className="ps-tech-note ps-reveal">{ps.silah.techNote}</div>
-          </div>
+          </section>
 
           <div className="ps-prod-foot ps-reveal">
             <span className="ps-foot-wm">{ps.silah.footWm}</span>
@@ -1001,7 +1091,7 @@ export default function ProductsShowcase({ scrollContainerId = "main-scroll" }: 
         </div>
       )}
 
-      <style jsx>{`
+      <style jsx global>{`
         .ps-root {
           position: relative;
           width: 100%;
@@ -1753,6 +1843,494 @@ export default function ProductsShowcase({ scrollContainerId = "main-scroll" }: 
           .ps-mobile .ps-prod-foot { padding: 32px 20px; }
           .ps-mobile .ps-switcher-wrap { padding: 10px 0 4px; }
           .ps-mobile .ps-pill { font-size: 10px; padding: 7px 14px; }
+        }
+
+        /* ════════════════════════════════════════════════════
+           COMPACT LAYOUT (design refresh) — overrides + new
+        ════════════════════════════════════════════════════ */
+        .ps-hero-title {
+          font-size: clamp(46px, 7vw, 96px);
+          margin-bottom: 20px;
+        }
+        .ps-hero-sub { margin-bottom: 32px; }
+
+        /* In-hero stack row beside Visit */
+        .ps-hero-row {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 8px;
+          margin-top: 20px;
+          pointer-events: auto;
+          max-width: 760px;
+          opacity: 0;
+          transform: translateY(10px);
+          animation: psFadeUp 0.7s 0.75s ease forwards;
+        }
+        .ps-hero-row .ps-hero-link {
+          margin-top: 0;
+          opacity: 1;
+          transform: none;
+          animation: none;
+          align-self: center;
+        }
+        .ps-stack-group-inline {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 6px;
+          padding: 5px 10px;
+          background: rgba(1, 56, 55, 0.55);
+          border: 1px solid rgba(246, 229, 198, 0.09);
+          border-radius: 8px;
+          cursor: pointer;
+          user-select: none;
+          transition: border-color 0.25s, background 0.25s;
+        }
+        .ps-stack-group-inline:hover { border-color: rgba(255, 183, 3, 0.28); background: rgba(1, 56, 55, 0.7); }
+        .ps-stack-group-inline.ps-open { border-color: rgba(255, 183, 3, 0.28); }
+        .ps-stack-group-inline-label {
+          font-family: var(--font-jetbrains-mono), monospace;
+          font-size: 9px;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: #FFB703;
+          padding-right: 5px;
+          border-right: 1px solid rgba(246, 229, 198, 0.09);
+          margin-right: 2px;
+        }
+        .ps-rtl .ps-stack-group-inline-label {
+          padding-right: 0; padding-left: 5px;
+          border-right: none; border-left: 1px solid rgba(246, 229, 198, 0.09);
+          margin-right: 0; margin-left: 2px;
+        }
+        .ps-stack-group-inline:not(.ps-open) .ps-chip-sm { display: none; }
+        .ps-chip-sm {
+          font-family: var(--font-jetbrains-mono), monospace;
+          font-size: 9px;
+          letter-spacing: 0.05em;
+          padding: 2px 6px;
+          border-radius: 3px;
+          border: 1px solid rgba(246, 229, 198, 0.12);
+          color: #F6E5C6;
+          background: rgba(246, 229, 198, 0.04);
+          animation: psChipFade 0.3s ease;
+        }
+        @keyframes psChipFade { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: none; } }
+        .ps-stack-count {
+          width: 14px;
+          height: 14px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          border: 1px solid rgba(255, 183, 3, 0.4);
+          color: #FFB703;
+          transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s;
+        }
+        .ps-stack-count::before {
+          content: "";
+          width: 5px;
+          height: 5px;
+          border-right: 1.4px solid currentColor;
+          border-bottom: 1.4px solid currentColor;
+          transform: rotate(-45deg) translate(-1px, 0);
+          display: inline-block;
+        }
+        .ps-stack-group-inline.ps-open .ps-stack-count::before { transform: rotate(-135deg) translate(0, -1px); }
+        .ps-stack-group-inline:hover .ps-stack-count { background: rgba(255, 183, 3, 0.12); }
+
+        /* Side-label compact section */
+        .ps-csect {
+          padding: 48px clamp(20px, 6vw, 72px);
+          display: grid;
+          grid-template-columns: minmax(220px, 1.1fr) minmax(0, 2.5fr);
+          gap: 48px;
+          align-items: start;
+        }
+        .ps-csect-gap { height: 32px; }
+        .ps-csect-head { position: sticky; top: 64px; align-self: start; }
+        .ps-csect-body { min-width: 0; }
+        .ps-sect-label { margin-bottom: 10px; }
+        .ps-sect-title {
+          font-size: clamp(22px, 2.4vw, 32px);
+          line-height: 1.12;
+          margin-bottom: 12px;
+          max-width: none;
+        }
+        .ps-sect-body { font-size: 13.5px; line-height: 1.7; max-width: none; }
+
+        /* Compact stat strip */
+        .ps-stat-strip {
+          display: flex;
+          flex-wrap: wrap;
+          border: 1px solid rgba(246, 229, 198, 0.09);
+          border-radius: 10px;
+          overflow: hidden;
+        }
+        .ps-stat-strip .ps-stat {
+          flex: 1;
+          min-width: 100px;
+          padding: 18px 16px;
+        }
+        .ps-stat-strip .ps-stat-n { font-size: 28px; margin-bottom: 6px; }
+        .ps-stat-strip .ps-stat-l { font-size: 9px; letter-spacing: 0.14em; }
+
+        /* Inline shot */
+        .ps-inline-shot {
+          margin-top: 18px;
+          border: 1px solid rgba(246, 229, 198, 0.1);
+          border-radius: 10px;
+          overflow: hidden;
+          background: rgba(1, 56, 55, 0.45);
+          box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+        }
+        .ps-inline-shot img { display: block; width: 100%; height: auto; }
+
+        /* Compact grids */
+        .ps-grid { display: grid; gap: 8px; }
+        .ps-grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .ps-grid-3 { grid-template-columns: repeat(3, 1fr); }
+        @media (max-width: 900px) {
+          .ps-grid-2, .ps-grid-3 { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 540px) {
+          .ps-grid-2, .ps-grid-3 { grid-template-columns: 1fr; }
+        }
+
+        /* Collapsible cards */
+        .ps-card {
+          padding: 14px 16px;
+          background: rgba(1, 56, 55, 0.65);
+          border-radius: 10px;
+          position: relative;
+          cursor: pointer;
+          user-select: none;
+          transition: border-color 0.25s, transform 0.25s, background 0.25s;
+        }
+        .ps-card:hover { border-color: rgba(255, 183, 3, 0.28); background: rgba(1, 56, 55, 0.78); transform: none; }
+        .ps-card.ps-open { border-color: rgba(255, 183, 3, 0.28); background: rgba(1, 56, 55, 0.85); }
+        .ps-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .ps-card-ttl { font-size: 14.5px; line-height: 1.25; margin-bottom: 0; flex: 1; min-width: 0; }
+        .ps-card-plus {
+          flex-shrink: 0;
+          width: 16px;
+          height: 16px;
+          position: relative;
+          opacity: 0.55;
+          transition: opacity 0.25s, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ps-card:hover .ps-card-plus, .ps-svc:hover .ps-card-plus { opacity: 0.9; }
+        .ps-card-plus::before, .ps-card-plus::after {
+          content: "";
+          position: absolute;
+          background: #FFB703;
+          top: 50%;
+          left: 50%;
+          border-radius: 1px;
+          transform: translate(-50%, -50%);
+        }
+        .ps-card-plus::before { width: 10px; height: 1.5px; }
+        .ps-card-plus::after { width: 1.5px; height: 10px; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        .ps-card.ps-open .ps-card-plus, .ps-svc.ps-open .ps-card-plus { transform: rotate(180deg); opacity: 1; }
+        .ps-card.ps-open .ps-card-plus::after, .ps-svc.ps-open .ps-card-plus::after { transform: translate(-50%, -50%) scaleY(0); }
+        .ps-card-detail {
+          display: grid;
+          grid-template-rows: 0fr;
+          transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.4s ease, opacity 0.3s ease;
+          opacity: 0;
+          margin-top: 0;
+        }
+        .ps-card-detail > div { overflow: hidden; }
+        .ps-card.ps-open .ps-card-detail { grid-template-rows: 1fr; opacity: 1; margin-top: 9px; }
+        .ps-card .ps-card-body { font-size: 12px; line-height: 1.55; }
+        .ps-card-badge { font-size: 8.5px; margin-bottom: 8px; }
+        .ps-signals { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+        .ps-signals .ps-tag { font-size: 9px; padding: 3px 8px; }
+
+        /* Feature portal cards */
+        .ps-pcrd-feature {
+          padding: 24px 24px 22px;
+          background: linear-gradient(180deg, rgba(1, 56, 55, 0.7) 0%, rgba(1, 56, 55, 0.55) 100%);
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          overflow: hidden;
+          border-radius: 12px;
+        }
+        .ps-pcrd-feature::before {
+          content: "";
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #FFB703, transparent);
+          opacity: 0;
+          transition: opacity 0.35s ease;
+        }
+        .ps-pcrd-feature:hover::before { opacity: 1; }
+        .ps-pcrd-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 9px;
+          background: rgba(255, 183, 3, 0.1);
+          border: 1px solid rgba(255, 183, 3, 0.22);
+          color: #FFB703;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 14px;
+          transition: background 0.25s, border-color 0.25s, transform 0.35s ease;
+        }
+        .ps-pcrd-feature:hover .ps-pcrd-icon { background: rgba(255, 183, 3, 0.18); border-color: rgba(255, 183, 3, 0.45); transform: translateY(-2px); }
+        .ps-pcrd-feature .ps-pcrd-name { font-size: 20px; margin-bottom: 5px; }
+        .ps-pcrd-feature .ps-pcrd-sub { font-size: 9.5px; margin-bottom: 14px; color: rgba(246, 229, 198, 0.45); }
+        .ps-pcrd-feature .ps-pcrd-body { font-size: 13px; line-height: 1.7; margin-bottom: 0; }
+
+        /* Collapsible service rows */
+        .ps-svc-list { display: flex; flex-direction: column; gap: 5px; margin-top: 0; }
+        .ps-svc {
+          display: block;
+          padding: 12px 18px;
+          background: rgba(1, 56, 55, 0.55);
+          border-radius: 8px;
+          cursor: pointer;
+          user-select: none;
+          transition: border-color 0.25s, background 0.25s;
+        }
+        .ps-svc:hover { border-color: rgba(255, 183, 3, 0.28); background: rgba(1, 56, 55, 0.68); }
+        .ps-svc.ps-open { border-color: rgba(255, 183, 3, 0.28); background: rgba(1, 56, 55, 0.78); }
+        .ps-svc-head { display: grid; grid-template-columns: 110px 1fr auto; gap: 18px; align-items: center; }
+        @media (max-width: 600px) { .ps-svc-head { grid-template-columns: 1fr auto; gap: 4px; } }
+        .ps-svc-lang { margin-bottom: 0; }
+        .ps-svc-name { font-size: 14px; margin-bottom: 0; }
+        .ps-svc-detail {
+          display: grid;
+          grid-template-rows: 0fr;
+          transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.4s ease, opacity 0.3s ease;
+          opacity: 0;
+          margin-top: 0;
+        }
+        .ps-svc-detail > div { overflow: hidden; }
+        .ps-svc.ps-open .ps-svc-detail { grid-template-rows: 1fr; opacity: 1; margin-top: 8px; }
+        .ps-svc-desc { font-size: 11.5px; line-height: 1.6; }
+        @media (min-width: 600px) { .ps-svc.ps-open .ps-svc-desc { padding-left: 128px; } }
+        .ps-rtl .ps-svc.ps-open .ps-svc-desc { padding-left: 0; }
+        @media (min-width: 600px) { .ps-rtl .ps-svc.ps-open .ps-svc-desc { padding-right: 128px; padding-left: 0; } }
+
+        /* Subsection header inside merged sections */
+        .ps-subsect-head {
+          margin-top: 32px;
+          padding-top: 24px;
+          border-top: 1px dashed rgba(246, 229, 198, 0.14);
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 14px;
+          flex-wrap: wrap;
+          margin-bottom: 14px;
+        }
+        .ps-subsect-label {
+          font-family: var(--font-jetbrains-mono), monospace;
+          font-size: 9.5px;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: #FFB703;
+        }
+        .ps-subsect-hint {
+          font-family: var(--font-jetbrains-mono), monospace;
+          font-size: 10px;
+          line-height: 1.5;
+          color: rgba(246, 229, 198, 0.5);
+        }
+
+        /* Horizontal flow rail */
+        .ps-flow-rail {
+          display: flex;
+          gap: 8px;
+          overflow-x: auto;
+          padding-bottom: 6px;
+          scroll-snap-type: x mandatory;
+        }
+        .ps-flow-card {
+          flex: 1 0 200px;
+          min-width: 200px;
+          scroll-snap-align: start;
+          padding: 14px 16px;
+          background: rgba(1, 56, 55, 0.6);
+          border: 1px solid rgba(246, 229, 198, 0.1);
+          border-radius: 9px;
+          position: relative;
+          transition: border-color 0.25s, transform 0.25s;
+        }
+        .ps-flow-card:hover { border-color: rgba(255, 183, 3, 0.28); transform: translateY(-2px); }
+        .ps-flow-card:not(:last-child)::after {
+          content: "→";
+          position: absolute;
+          right: -12px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: rgba(255, 183, 3, 0.55);
+          font-size: 14px;
+          z-index: 2;
+        }
+        .ps-rtl .ps-flow-card:not(:last-child)::after { content: "←"; right: auto; left: -12px; }
+        @media (max-width: 900px) { .ps-flow-card:not(:last-child)::after { display: none; } }
+        .ps-flow-n { font-family: var(--font-jetbrains-mono), monospace; font-size: 9px; letter-spacing: 0.18em; color: rgba(255, 183, 3, 0.65); margin-bottom: 5px; }
+        .ps-flow-name { font-family: var(--font-playfair), Georgia, serif; font-size: 13.5px; font-weight: 700; color: #F6E5C6; margin-bottom: 3px; line-height: 1.2; }
+        .ps-flow-sub { font-family: var(--font-jetbrains-mono), monospace; font-size: 10px; line-height: 1.45; color: rgba(246, 229, 198, 0.55); }
+
+        /* Tabs */
+        .ps-tab-set { position: relative; }
+        .ps-tab-strip { display: flex; gap: 0; flex-wrap: wrap; border-bottom: 1px solid rgba(246, 229, 198, 0.09); margin-bottom: 18px; }
+        .ps-tab-btn {
+          font-family: var(--font-jetbrains-mono), monospace;
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          padding: 11px 16px;
+          background: none;
+          border: none;
+          color: rgba(246, 229, 198, 0.5);
+          cursor: pointer;
+          border-bottom: 2px solid transparent;
+          margin-bottom: -1px;
+          transition: color 0.25s, border-color 0.25s;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .ps-tab-btn::before { content: attr(data-n); font-size: 9px; color: rgba(255, 183, 3, 0.45); letter-spacing: 0.15em; }
+        .ps-tab-btn:hover { color: #F6E5C6; }
+        .ps-tab-btn.ps-active { color: #FFB703; border-color: #FFB703; }
+        .ps-tab-btn.ps-active::before { color: #FFB703; }
+        .ps-tab-panel { display: none; animation: psTabFade 0.35s ease; }
+        .ps-tab-panel.ps-active { display: block; }
+        @keyframes psTabFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        .ps-tab-panel-ttl { font-family: var(--font-playfair), Georgia, serif; font-size: 20px; font-weight: 700; color: #F6E5C6; margin-bottom: 10px; line-height: 1.25; }
+        .ps-tab-panel-body { font-size: 13.5px; line-height: 1.7; color: rgba(246, 229, 198, 0.6); margin-bottom: 14px; max-width: 62ch; }
+
+        /* Numbered problem list */
+        .ps-problist { display: flex; flex-direction: column; border-top: 1px solid rgba(246, 229, 198, 0.09); }
+        .ps-prob {
+          display: grid;
+          grid-template-columns: 60px 1fr;
+          gap: 24px;
+          padding: 18px 4px;
+          border-bottom: 1px solid rgba(246, 229, 198, 0.09);
+          cursor: default;
+        }
+        .ps-prob-n { font-family: var(--font-playfair), Georgia, serif; font-size: 36px; font-weight: 700; line-height: 1; color: rgba(255, 183, 3, 0.28); transition: color 0.3s, transform 0.3s; }
+        .ps-prob:hover .ps-prob-n, .ps-prob.ps-open .ps-prob-n { color: #FFB703; transform: translateX(4px); }
+        .ps-rtl .ps-prob:hover .ps-prob-n, .ps-rtl .ps-prob.ps-open .ps-prob-n { transform: translateX(-4px); }
+        .ps-prob-body { min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+        .ps-prob-t { font-family: var(--font-playfair), Georgia, serif; font-size: 16px; font-weight: 700; color: #F6E5C6; line-height: 1.25; }
+        .ps-prob-desc {
+          font-size: 12.5px;
+          line-height: 1.65;
+          color: rgba(246, 229, 198, 0.6);
+          max-height: 0;
+          overflow: hidden;
+          opacity: 0;
+          transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.3s ease;
+          margin-top: 0;
+        }
+        .ps-prob:hover .ps-prob-desc, .ps-prob.ps-open .ps-prob-desc { max-height: 200px; opacity: 1; margin-top: 6px; }
+
+        /* Vertical timeline */
+        .ps-timeline { position: relative; padding-left: 36px; display: flex; flex-direction: column; gap: 18px; }
+        .ps-rtl .ps-timeline { padding-left: 0; padding-right: 36px; }
+        .ps-timeline::before {
+          content: "";
+          position: absolute;
+          left: 11px;
+          top: 8px;
+          bottom: 8px;
+          width: 1px;
+          background: linear-gradient(to bottom, #FFB703 0%, rgba(255, 183, 3, 0.15) 100%);
+        }
+        .ps-rtl .ps-timeline::before { left: auto; right: 11px; }
+        .ps-tl-step { position: relative; padding-left: 2px; }
+        .ps-tl-step::before {
+          content: "";
+          position: absolute;
+          left: -30px;
+          top: 5px;
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+          background: #FFB703;
+          box-shadow: 0 0 0 4px rgba(1, 56, 55, 0.9), 0 0 0 5px rgba(255, 183, 3, 0.18);
+        }
+        .ps-rtl .ps-tl-step::before { left: auto; right: -30px; }
+        .ps-tl-n { font-family: var(--font-jetbrains-mono), monospace; font-size: 9px; letter-spacing: 0.2em; color: rgba(255, 183, 3, 0.65); margin-bottom: 4px; }
+        .ps-tl-t { font-family: var(--font-playfair), Georgia, serif; font-size: 16px; font-weight: 700; color: #F6E5C6; margin-bottom: 4px; line-height: 1.25; }
+        .ps-tl-d { font-family: var(--font-jetbrains-mono), monospace; font-size: 11px; line-height: 1.55; color: rgba(246, 229, 198, 0.55); }
+
+        /* Featured showcase */
+        .ps-showcase { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; align-items: stretch; }
+        @media (max-width: 800px) { .ps-showcase { grid-template-columns: 1fr; } }
+        .ps-showcase-featured {
+          position: relative;
+          padding: 24px 26px;
+          background: rgba(1, 56, 55, 0.78);
+          border: 1px solid rgba(255, 183, 3, 0.28);
+          border-radius: 12px;
+          display: flex;
+          flex-direction: column;
+          min-height: 200px;
+          animation: psTabFade 0.35s ease;
+        }
+        .ps-showcase-featured-badge {
+          font-family: var(--font-jetbrains-mono), monospace;
+          font-size: 9px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #FFB703;
+          background: rgba(255, 183, 3, 0.1);
+          border: 1px solid rgba(255, 183, 3, 0.3);
+          padding: 4px 10px;
+          border-radius: 100px;
+          display: inline-block;
+          margin-bottom: 14px;
+          align-self: flex-start;
+        }
+        .ps-showcase-featured-t { font-family: var(--font-playfair), Georgia, serif; font-size: 22px; font-weight: 700; color: #F6E5C6; margin-bottom: 12px; line-height: 1.2; }
+        .ps-showcase-featured-body { font-size: 13.5px; line-height: 1.7; color: rgba(246, 229, 198, 0.6); }
+        .ps-showcase-list { display: flex; flex-direction: column; gap: 6px; }
+        .ps-showcase-item {
+          padding: 12px 14px;
+          background: rgba(1, 56, 55, 0.5);
+          border: 1px solid rgba(246, 229, 198, 0.09);
+          border-radius: 8px;
+          cursor: pointer;
+          transition: border-color 0.25s, background 0.25s, transform 0.25s;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .ps-showcase-item:hover { border-color: rgba(255, 183, 3, 0.28); background: rgba(1, 56, 55, 0.7); transform: translateX(3px); }
+        .ps-rtl .ps-showcase-item:hover { transform: translateX(-3px); }
+        .ps-showcase-item.ps-active { border-color: #FFB703; background: rgba(255, 183, 3, 0.06); }
+        .ps-showcase-item-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 183, 3, 0.3); flex-shrink: 0; transition: background 0.25s, box-shadow 0.25s; }
+        .ps-showcase-item.ps-active .ps-showcase-item-dot { background: #FFB703; box-shadow: 0 0 0 3px rgba(255, 183, 3, 0.18); }
+        .ps-showcase-item-t { font-family: var(--font-playfair), Georgia, serif; font-size: 13px; font-weight: 700; color: #F6E5C6; line-height: 1.2; flex: 1; }
+        .ps-showcase-item-badge { font-family: var(--font-jetbrains-mono), monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255, 183, 3, 0.55); white-space: nowrap; }
+
+        /* Stagger up to 7 children */
+        .ps-rs.ps-vis > *:nth-child(7) { opacity: 1; transform: none; transition-delay: 0.6s; }
+
+        /* Compact layout responsive */
+        @media (max-width: 900px) {
+          .ps-csect { grid-template-columns: 1fr; gap: 24px; padding: 42px clamp(20px, 6vw, 40px); }
+          .ps-csect-head { position: static; }
+        }
+        @media (max-width: 767px) {
+          .ps-mobile .ps-csect { padding: 40px 20px; gap: 20px; }
+          .ps-mobile .ps-stat-strip .ps-stat { min-width: 80px; padding: 14px 10px; }
+          .ps-mobile .ps-stat-strip .ps-stat-n { font-size: 24px; }
+          .ps-mobile .ps-showcase { grid-template-columns: 1fr; }
+          .ps-mobile .ps-prob { grid-template-columns: 44px 1fr; gap: 16px; }
+          .ps-mobile .ps-hero-row { margin-top: 16px; }
         }
       `}</style>
     </div>
