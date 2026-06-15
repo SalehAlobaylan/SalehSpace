@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useLocale } from "@/lib/localeContext";
+import StarField from "@/components/starField";
 
 type ProductId = "wahb" | "silah";
 
@@ -591,20 +592,6 @@ export default function ProductsShowcase({ scrollContainerId = "main-scroll" }: 
     const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
     camera.position.z = 6;
 
-    // Ambient particles
-    const ptGeo = new THREE.BufferGeometry();
-    const ptCount = 120;
-    const ptPos = new Float32Array(ptCount * 3);
-    for (let i = 0; i < ptCount; i++) {
-      ptPos[i * 3] = (Math.random() - 0.5) * 28;
-      ptPos[i * 3 + 1] = (Math.random() - 0.5) * 16;
-      ptPos[i * 3 + 2] = (Math.random() - 0.5) * 12 - 4;
-    }
-    ptGeo.setAttribute("position", new THREE.BufferAttribute(ptPos, 3));
-    const ptMat = new THREE.PointsMaterial({ color: 0xffb703, size: 0.04, transparent: true, opacity: 0.35 });
-    const points = new THREE.Points(ptGeo, ptMat);
-    scene.add(points);
-
     const group = new THREE.Group();
     scene.add(group);
 
@@ -745,10 +732,6 @@ export default function ProductsShowcase({ scrollContainerId = "main-scroll" }: 
         p.mesh.position.y += Math.sin(t * 0.6 + i * 1.4) * 0.0025;
         p.mesh.rotation.z = Math.sin(t * 0.35 + i) * 0.008;
       });
-      const arr = ptGeo.attributes.position.array as Float32Array;
-      arr[1] += 0.0004;
-      if (arr[1] > 8) arr[1] = -8;
-      ptGeo.attributes.position.needsUpdate = true;
       renderer.render(scene, camera);
     };
     animate();
@@ -774,8 +757,6 @@ export default function ProductsShowcase({ scrollContainerId = "main-scroll" }: 
       planeObjs.forEach(p => { p.mesh.geometry.dispose(); (p.mesh.material as THREE.Material).dispose(); });
       [tWahbPipeline, tWahbForYou, tWahbNews, tSilahStudio, tSilahDashboard, tSilahVersions].forEach(t => t.dispose());
       timer.dispose();
-      ptGeo.dispose();
-      ptMat.dispose();
       renderer.dispose();
     };
   }, [scrollContainerId, isMobile]);
@@ -801,7 +782,18 @@ export default function ProductsShowcase({ scrollContainerId = "main-scroll" }: 
 
   return (
     <div ref={rootRef} className={`ps-root ${isRTL ? "ps-rtl" : ""} ${isMobile ? "ps-mobile" : ""}`} dir={isRTL ? "rtl" : "ltr"}>
-      {!isMobile && <canvas ref={canvasRef} className="ps-canvas" />}
+      {!isMobile && (
+        <>
+          <canvas ref={canvasRef} className="ps-canvas" />
+          <StarField
+            count={120}
+            opacity={0.35}
+            size={0.04}
+            driftSpeed={0.0004}
+            className="ps-canvas"
+          />
+        </>
+      )}
 
       <div className="ps-switcher-wrap">
         <div className="ps-switcher">

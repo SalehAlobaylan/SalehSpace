@@ -5,6 +5,7 @@ import TechStack from "@/components/techStack";
 import Socials from "@/components/socials";
 import LanguageSwitcher from "@/components/languageSwitcher";
 import ProductsShowcase from "@/components/productsShowcase";
+import StarField from "@/components/starField";
 import { useLocale } from "@/lib/localeContext";
 import type { Post } from "@/components/postsCarousel";
 
@@ -150,11 +151,21 @@ export default function HomeClient({ githubSection, posts: _posts }: { githubSec
               activeTab === "overview" ? "active" : ""
             }`}
           >
-            <div className="w-full mb-4 relative hidden md:block">
-              {/* <PostsCarousel posts={posts} /> */}
+            {activeTab === "overview" && (
+              <StarField
+                count={80}
+                opacity={0.55}
+                size={0.055}
+                driftSpeed={0.00035}
+              />
+            )}
+            <div className="relative z-10 w-full">
+              <div className="w-full mb-4 relative hidden md:block">
+                {/* <PostsCarousel posts={posts} /> */}
+              </div>
+              <Socials onGithubClick={() => changeTab("github")} />
+              <TechStack />
             </div>
-            <Socials onGithubClick={() => changeTab("github")} />
-            <TechStack />
           </section>
 
           {/* TAB: PRODUCTS — heavy mount gated on showcaseMounted */}
