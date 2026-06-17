@@ -8,6 +8,7 @@ type TechItem = {
   key: string;
   alt: string;
   customSrc?: string;
+  textBadge?: string;
 };
 
 type ShieldItem = {
@@ -18,14 +19,16 @@ type ShieldItem = {
 
 const mainStack: TechItem[] = [
   { i: "ts", key: "ts", alt: "TypeScript" },
-  { i: "js", key: "js", alt: "JavaScript" },
   { i: "go", key: "go", alt: "Go" },
   { i: "nextjs", key: "nextjs", alt: "Next.js" },
   { i: "postgres", key: "postgres", alt: "PostgreSQL" },
+  { i: "neon", key: "neon", alt: "Neon", customSrc: "https://cdn.simpleicons.org/neon/00E599" },
+  { i: "supabase", key: "supabase", alt: "Supabase" },
   { i: "aws", key: "aws", alt: "AWS" },
 ];
 
 const workedWithStack: TechItem[] = [
+  { i: "js", key: "js", alt: "JavaScript" },
   { i: "python", key: "python", alt: "Python" },
   { i: "java", key: "java", alt: "Java" },
   { i: "express", key: "express", alt: "Express" },
@@ -33,11 +36,22 @@ const workedWithStack: TechItem[] = [
   { i: "sqlite", key: "sqlite", alt: "SQLite" },
   { i: "mongodb", key: "mongodb", alt: "MongoDB" },
   { i: "redis", key: "redis", alt: "Redis" },
+  { i: "prisma", key: "prisma", alt: "Prisma" },
   { i: "cursor", key: "cursor", alt: "Cursor", customSrc: "https://www.cursor.com/assets/images/logo.svg" },
   { i: "claudecode", key: "claudecode", alt: "Claude Code", customSrc: "https://cdn.simpleicons.org/claude" },
   { i: "codex", key: "codex", alt: "Codex", customSrc: "https://api.iconify.design/simple-icons/openai.svg?color=%23F6E5C6" },
   { i: "postman", key: "postman", alt: "Postman" },
   { i: "docker", key: "docker", alt: "Docker" },
+  { i: "kubernetes", key: "kubernetes", alt: "Kubernetes" },
+  { i: "kafka", key: "kafka", alt: "Kafka" },
+  { i: "gcp", key: "gcp", alt: "Google Cloud" },
+  { i: "grafana", key: "grafana", alt: "Grafana" },
+  { i: "ffmpeg", key: "ffmpeg", alt: "FFmpeg", customSrc: "https://cdn.simpleicons.org/ffmpeg/F6E5C6" },
+  { i: "trpc", key: "trpc", alt: "tRPC", customSrc: "https://cdn.simpleicons.org/trpc/2596BE" },
+  { i: "payfort", key: "payfort", alt: "Payfort / Amazon Payment Services", customSrc: "https://api.iconify.design/fa-brands/amazon-pay.svg?color=%23F6E5C6" },
+  { i: "openai", key: "openai", alt: "OpenAI", customSrc: "https://api.iconify.design/simple-icons/openai.svg?color=%23F6E5C6" },
+  { i: "llms", key: "llms", alt: "LLMs", textBadge: "LLM" },
+  { i: "ttsstt", key: "ttsstt", alt: "TTS / STT", textBadge: "STT/TTS" },
   { i: "notion", key: "notion", alt: "Notion" },
   { i: "firebase", key: "firebase", alt: "Firebase" },
   { i: "tailwind", key: "tailwind", alt: "Tailwind" },
@@ -156,12 +170,18 @@ export default function TechStack() {
                 selectedTech === tech.alt ? "ring-2 ring-[#FFB703] scale-110" : ""
               }`}
             >
-              <img
-                src={tech.customSrc || `https://skillicons.dev/icons?i=${tech.i}`}
-                height="35"
-                className="h-[35px]"
-                alt={tech.alt}
-              />
+              {tech.textBadge ? (
+                <span className="flex h-[35px] min-w-[46px] items-center justify-center rounded-lg border border-[#F6E5C6]/15 bg-[#013837]/45 px-2 font-mono text-[10px] font-semibold tracking-wide text-[#F6E5C6]/80">
+                  {tech.textBadge}
+                </span>
+              ) : (
+                <img
+                  src={tech.customSrc || `https://skillicons.dev/icons?i=${tech.i}`}
+                  height="35"
+                  className="h-[35px]"
+                  alt={tech.alt}
+                />
+              )}
             </button>
           ))}
         </div>

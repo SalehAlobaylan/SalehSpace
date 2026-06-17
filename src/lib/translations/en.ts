@@ -157,6 +157,9 @@ export interface Translation {
     go: string;
     nextjs: string;
     postgres: string;
+    prisma: string;
+    neon: string;
+    supabase: string;
     aws: string;
     python: string;
     java: string;
@@ -168,6 +171,17 @@ export interface Translation {
     cursor: string;
     postman: string;
     docker: string;
+    kubernetes: string;
+    kafka: string;
+    gcp: string;
+    grafana: string;
+    ffmpeg: string;
+    trpc: string;
+    payfort: string;
+    openai: string;
+    whisper: string;
+    llms: string;
+    ttsstt: string;
     notion: string;
     firebase: string;
     tailwind: string;
@@ -550,6 +564,9 @@ export const en: Translation = {
       "I'm not a frontend engineer but if I'm fullstacking I'm using Next.js.",
     postgres:
       "used it for production, served with it more than 20k monthly active users.",
+    prisma: "ORM option I use with TypeScript projects.",
+    neon: "My alternative managed database provider.",
+    supabase: "My alternative managed database provider.",
     aws: "Deployed scalable apps using EC2, S3, IAM, and RDS for cloud infrastructure and used RDS for production.",
     python: "Used it for data Analysis with numpy, pandas, matplotlib.",
     java: "Started with it for fundamentals, OOP, Data structures.",
@@ -563,6 +580,17 @@ export const en: Translation = {
     cursor: "My primary AI-powered code editor for accelerated development.",
     postman: "API testing and documentation for backend development workflows.",
     docker: "Containerized applications for consistent dev/prod environments.",
+    kubernetes: "Basics for container orchestration and scaling.",
+    kafka: "Basics for event-driven systems and queues.",
+    gcp: "Cloud tools for AI, scaling, and managed services.",
+    grafana: "Monitoring and observability dashboards.",
+    ffmpeg: "Media processing for audio and video workflows.",
+    trpc: "Type-safe APIs in TypeScript apps.",
+    payfort: "Payment integration through Amazon Payment Services.",
+    openai: "Model APIs and AI product integrations.",
+    whisper: "Speech-to-text for audio transcription.",
+    llms: "Language models inside product workflows.",
+    ttsstt: "Voice input and output for AI features.",
     notion:
       "used its SDK for light databases integration and project management, and documentation.",
     firebase: "Used for authentication primarily.",
@@ -590,7 +618,7 @@ export const en: Translation = {
     huggingface: "Where I host and deploy my models.",
     tavily: "Search API for retrieval in AI workflows.",
     zustand: "Minimal, hook-based state management for React.",
-    cranl: "Cloud deployment platform — deploy and manage apps in seconds.",
+    cranl: "Cloud deployment platform — deploy and manage apps in Saudia Arabia.",
     claudecode: "My main agentic coding tool — runs in the terminal, writes, edits, and ships code end-to-end.",
     codex: "OpenAI's cloud coding agent — used it alongside Claude Code for AI-assisted development.",
   },
