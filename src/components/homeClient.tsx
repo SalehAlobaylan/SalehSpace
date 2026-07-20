@@ -6,8 +6,7 @@ import Socials from "@/components/socials";
 import LanguageSwitcher from "@/components/languageSwitcher";
 import ProductsShowcase from "@/components/productsShowcase";
 import StarField from "@/components/starField";
-import YearRibbon from "@/components/yearRibbon";
-import YearSummary from "@/components/yearSummary";
+
 import { useLocale } from "@/lib/localeContext";
 import type { Post } from "@/components/postsCarousel";
 
@@ -15,7 +14,7 @@ type TabId = "overview" | "products" | "github";
 
 const TRANSITION_MS = 900;
 const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
-const OVERLAY_TRANSITION_MS = 520;
+
 
 export default function HomeClient({ githubSection, posts: _posts }: { githubSection: React.ReactNode; posts: Post[] }) {
   const [activeTab, setActiveTab] = useState<TabId>("overview");
@@ -23,11 +22,10 @@ export default function HomeClient({ githubSection, posts: _posts }: { githubSec
   // Keep it mounted briefly after leaving products so the exit animation can play.
   const [showcaseMounted, setShowcaseMounted] = useState(false);
   const [animating, setAnimating] = useState(false);
-  const [yearOverlayMounted, setYearOverlayMounted] = useState(false);
-  const [yearOverlayOpen, setYearOverlayOpen] = useState(false);
+
   const animTimer = useRef<number | null>(null);
   const mountTimer = useRef<number | null>(null);
-  const overlayTimer = useRef<number | null>(null);
+
 
   const { t, isRTL } = useLocale();
   const isProducts = activeTab === "products";
@@ -58,37 +56,9 @@ export default function HomeClient({ githubSection, posts: _posts }: { githubSec
     return () => {
       if (animTimer.current) clearTimeout(animTimer.current);
       if (mountTimer.current) clearTimeout(mountTimer.current);
-      if (overlayTimer.current) clearTimeout(overlayTimer.current);
+
     };
   }, []);
-
-  useEffect(() => {
-    if (!yearOverlayMounted) return;
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") closeYearOverlay();
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
-    };
-  }, [yearOverlayMounted]);
-
-  function openYearOverlay() {
-    if (overlayTimer.current) clearTimeout(overlayTimer.current);
-    setYearOverlayMounted(true);
-    requestAnimationFrame(() => setYearOverlayOpen(true));
-  }
-
-  function closeYearOverlay() {
-    setYearOverlayOpen(false);
-    if (overlayTimer.current) clearTimeout(overlayTimer.current);
-    overlayTimer.current = window.setTimeout(() => setYearOverlayMounted(false), OVERLAY_TRANSITION_MS);
-  }
 
   const transition = `all ${TRANSITION_MS}ms ${EASE}`;
   const transitionPaddingBg = `padding ${TRANSITION_MS}ms ${EASE}, background-color ${TRANSITION_MS}ms ${EASE}`;
@@ -96,7 +66,7 @@ export default function HomeClient({ githubSection, posts: _posts }: { githubSec
 
   return (
     <div className="h-screen w-full flex items-center justify-center relative selection:bg-[#FFB703] selection:text-[#013837] overflow-hidden">
-      <YearRibbon hidden={isProducts || yearOverlayMounted} onExplore={openYearOverlay} />
+
       <div
         className={`blob bg-[#FFB703] w-96 h-96 top-0 left-0 -translate-x-1/2 -translate-y-1/2 ${
           isProducts ? "opacity-0" : "opacity-40"
@@ -237,24 +207,6 @@ export default function HomeClient({ githubSection, posts: _posts }: { githubSec
         </footer>
       </main>
 
-      {yearOverlayMounted && (
-        <div
-          className={`fixed inset-0 z-[120] bg-[#013837]/55 backdrop-blur-md transition-opacity duration-500 ${
-            yearOverlayOpen ? "opacity-100" : "opacity-0"
-          }`}
-          aria-modal="true"
-          role="dialog"
-          aria-label="ملخص السنة"
-        >
-          <div
-            className={`absolute inset-0 overflow-hidden bg-[#013837] shadow-2xl transition-transform duration-500 ease-out ${
-              yearOverlayOpen ? "translate-y-0" : "translate-y-full"
-            }`}
-          >
-            <YearSummary onClose={closeYearOverlay} />
-          </div>
-        </div>
-      )}
     </div>
   );
 }
