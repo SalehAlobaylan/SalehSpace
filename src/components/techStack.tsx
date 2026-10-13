@@ -22,8 +22,6 @@ const mainStack: TechItem[] = [
   { i: "go", key: "go", alt: "Go" },
   { i: "nextjs", key: "nextjs", alt: "Next.js" },
   { i: "postgres", key: "postgres", alt: "PostgreSQL" },
-  { i: "neon", key: "neon", alt: "Neon", customSrc: "https://cdn.simpleicons.org/neon/00E599" },
-  { i: "supabase", key: "supabase", alt: "Supabase" },
   { i: "aws", key: "aws", alt: "AWS" },
 ];
 
@@ -34,6 +32,8 @@ const workedWithStack: TechItem[] = [
   { i: "express", key: "express", alt: "Express" },
   { i: "angular", key: "angular", alt: "Angular" },
   { i: "sqlite", key: "sqlite", alt: "SQLite" },
+  { i: "neon", key: "neon", alt: "Neon", customSrc: "https://cdn.simpleicons.org/neon/00E599" },
+  { i: "supabase", key: "supabase", alt: "Supabase" },
   { i: "mongodb", key: "mongodb", alt: "MongoDB" },
   { i: "redis", key: "redis", alt: "Redis" },
   { i: "prisma", key: "prisma", alt: "Prisma" },
